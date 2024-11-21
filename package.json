@@ -1,0 +1,51 @@
+{
+  "name": "expensesapi",
+  "version": "1.0.0",
+  "description": "Expenses Tracker WebApp",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/sahashiharshit/Expenses-App.git"
+  },
+  "keywords": [
+    "Node",
+    "Express",
+    "Api",
+    "Backend",
+    "ExpenseTracker"
+  ],
+  "author": "Harshit Sah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sahashiharshit/Expenses-App/issues"
+  },
+  "homepage": "https://github.com/sahashiharshit/Expenses-App#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "dependencies": {
+    "@getbrevo/brevo": "^1.0.1",
+    "aws-sdk": "^2.1692.0",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mariadb": "^3.4.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.11.4",
+    "nodemailer": "^6.9.16",
+    "querystring": "^0.2.1",
+    "razorpay": "^2.9.5",
+    "sequelize": "^6.37.5",
+    "sequelize-cli": "^6.6.2",
+    "superagent": "^10.1.1",
+    "uuid": "^11.0.3"
+  }
+}
