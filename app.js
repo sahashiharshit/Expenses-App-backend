@@ -30,7 +30,9 @@ app.use("/expense",expenses);
 app.use("/purchase",premium);
 app.use("/premium",premium);
 app.use("/password",authentication);
-
+app.use((req,res)=>{
+    res.sendFile(path.join(__dirname,`public/login.html`));
+})
 User.hasMany(Expenses);
 Expenses.belongsTo(User);
 User.hasMany(Order);

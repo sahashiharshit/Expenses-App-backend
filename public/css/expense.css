@@ -1,0 +1,9 @@
+.expense-div{
+    background-color: beige;
+}
+body {
+    background: linear-gradient(135deg, #c7f3ef, #fad0c4);
+    margin-top: 1rem;
+    display: flex;
+    font-family: 'Arial', sans-serif;
+  }
