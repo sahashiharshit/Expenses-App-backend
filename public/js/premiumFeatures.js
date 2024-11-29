@@ -2,7 +2,7 @@
 async function fetchLeaderBoard() {
     
     try {
-        const response = await axios.get("http://3.110.45.144:3000/premium/showleaderboard");
+        const response = await axios.get("http://43.204.219.193:3000/premium/showleaderboard");
         
         displayBoard(response.data);
     } catch (error) {
