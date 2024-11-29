@@ -3,7 +3,7 @@ async function forgotPassword(event) {
   const email = document.querySelector("#email").value;
   try {
     const response = await axios.post(
-      "http://3.111.41.143:3000/password/forgotpassword",
+      "http://43.204.219.193:3000/password/forgotpassword",
       {
         email: email,
       }
