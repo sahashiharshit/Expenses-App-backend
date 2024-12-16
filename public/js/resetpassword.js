@@ -3,7 +3,7 @@ const token = new URLSearchParams(window.location.search).get('token');
 
 async function verify(token) {
     try {
-        const response = await axios.get(`http://3.110.45.144:3000/password/verify-token/${token}`);
+        const response = await axios.get(`http://15.207.2.34:3000/password/verify-token/${token}`);
         
                 
         
@@ -25,7 +25,7 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async (e
     const newPassword = document.getElementById('newPassword').value;
 try {
  
-    const response = await axios.post('http://3.110.45.144:3000/password/reset-password', {
+    const response = await axios.post('http://15.207.2.34:3000/password/reset-password', {
         token:token,
         password:newPassword 
         });

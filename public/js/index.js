@@ -6,7 +6,7 @@ async function signupuser(event) {
   const email = document.querySelector("#useremail").value;
   const errormsg = document.querySelector("#error");
   try {
-    const response = await axios.post("http://3.110.45.144:3000/expense/signup", {
+    const response = await axios.post("http://15.207.2.34:3000/expense/signup", {
       username: username,
       email: email,
       password: password,
@@ -33,7 +33,7 @@ async function userlogin(event) {
   const email = document.querySelector("#loginemail").value;
   const errormsg = document.querySelector("#error");
   try {
-    const response = await axios.post("http://3.110.45.144:3000/expense/login", {
+    const response = await axios.post("http://15.207.2.34:3000/expense/login", {
       email: email,
       password: password,
     });

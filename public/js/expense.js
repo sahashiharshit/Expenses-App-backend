@@ -9,7 +9,7 @@ async function addExpenses(event) {
   try {
     const token = localStorage.getItem("AuthToken");
     const response = await axios.post(
-      "http://3.110.45.144:3000/expense/add",
+      "http://15.207.2.34:3000/expense/add",
       {
         money: money,
         expenseName: expenseName,
@@ -51,7 +51,7 @@ async function fetchExpenses(page=1,limit=10) {
   try {
     const token = localStorage.getItem("AuthToken");
     const response = await axios.get(
-      "http:///3.110.45.144:3000/expense/getExpenses",
+      "http://15.207.2.34:3000/expense/getExpenses",
       {params:
       { 
       page:page,
@@ -128,7 +128,7 @@ function renderPagination(currentPage, totalPages,limit) {
 async function buyPremium(e) {
   const token = localStorage.getItem("AuthToken");
   const response = await axios.get(
-    "http://3.110.45.144:3000/purchase/premiummembership",
+    "http://15.207.2.34:3000/purchase/premiummembership",
     { headers: { Authorization: token } }
   );
 
@@ -137,7 +137,7 @@ async function buyPremium(e) {
     order_id: response.data.order.id,
     handler: async function (response) {
       await axios.post(
-        "http://3.110.45.144:3000/purchase/updatetransactionstatus",
+        "http://15.207.2.34:3000/purchase/updatetransactionstatus",
         {
           order_id: options.order_id,
           payment_id: response.razorpay_payment_id,
@@ -160,7 +160,7 @@ async function buyPremium(e) {
   e.preventDefault();
   rzp1.on("payment.failed", async function (res) {
     await axios.post(
-      "http://3.110.45.144:3000/purchase/updatefailedtransactionstatus",
+      "http://15.207.2.34:3000/purchase/updatefailedtransactionstatus",
       {
         order_id: res.error.metadata.order_id,
         payment_id: res.error.metadata.payment_id,
@@ -192,7 +192,7 @@ async function checkPremium() {
 
 async function checkPremiumMembership(token) {
   const status = await axios.get(
-    "http://3.110.45.144:3000/purchase/checkpremium",
+    "http://15.207.2.34:3000/purchase/checkpremium",
     { headers: { Authorization: token } }
   );
   return status.data.ispremiumuser;
@@ -205,7 +205,7 @@ async function deleteExpense(expenseId, money) {
     const token = localStorage.getItem("AuthToken");
 
     const response = await axios.delete(
-      `http://3.110.45.144:3000/expense/deleteExpense/${expenseId}`,
+      `http://15.207.2.34:3000/expense/deleteExpense/${expenseId}`,
 
       {
         headers: { Authorization: token },
@@ -226,7 +226,7 @@ async function deleteExpense(expenseId, money) {
 async function downloadfile() {
   const token = localStorage.getItem("AuthToken");
   try {
-    const response = await axios.get("http://3.110.45.144:3000/premium/download", {
+    const response = await axios.get("http://15.207.2.34:3000/premium/download", {
       headers: { Authorization: token },
     });
     window.open(response.data, "_blank");
@@ -239,7 +239,7 @@ async function showOldReports() {
   const token = localStorage.getItem("AuthToken");
   try {
     const response = await axios.get(
-      "http://3.110.45.144:3000/premium/oldReports",
+      "http://15.207.2.34:3000/premium/oldReports",
       {
         headers: { Authorization: token },
       }
