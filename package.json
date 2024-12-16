@@ -1,43 +1,42 @@
 {
-  "name": "Expenses-App",
+  "name": "expenses-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-<<<<<<< HEAD
-  "bugs": {
-    "url": "https://github.com/sahashiharshit/Expenses-App/issues"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahashiharshit/Expenses-App-backend.git"
   },
-  "homepage": "https://github.com/sahashiharshit/Expenses-App#readme",
+  "keywords": [
+    "Node",
+    "Express"
+  ],
+  "author": "Harshit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sahashiharshit/Expenses-App-backend/issues"
+  },
+  "homepage": "https://github.com/sahashiharshit/Expenses-App-backend#readme",
+  "description": "",
   "devDependencies": {
     "nodemon": "^3.1.9"
   },
-=======
->>>>>>> 4d9965b23afd299b97e0cb4c9611135d9a9aaa4a
   "dependencies": {
     "@getbrevo/brevo": "^2.2.0",
     "aws-sdk": "^2.1692.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-<<<<<<< HEAD
-    "express": "^4.21.1",
-=======
     "express": "^4.21.2",
->>>>>>> 4d9965b23afd299b97e0cb4c9611135d9a9aaa4a
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
     "mysql2": "^3.11.5",
     "nodemailer": "^6.9.16",
-    "querystring": "^0.2.1",
     "razorpay": "^2.9.5",
     "sequelize": "^6.37.5",
-    "superagent": "^10.1.1",
     "uuid": "^11.0.3"
   }
 }
