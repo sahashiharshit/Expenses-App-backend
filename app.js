@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
+
 const db = require("./utils/database");
 
 const authentication = require('./routes/authenticationRoute');
