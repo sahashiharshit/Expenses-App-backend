@@ -3,4 +3,4 @@ node_modules
 ExpenseSecureKey.pem
 .vscode
 .idea
-pnpm-lock.yaml
+.\pnpm-lock.yaml
