@@ -2,7 +2,7 @@
 async function fetchLeaderBoard() {
     
     try {
-        const response = await axios.get("http://15.207.2.34:3000/premium/showleaderboard");
+        const response = await axios.get("https://hsexpensetracker.duckdns.org/premium/showleaderboard");
         
         displayBoard(response.data);
     } catch (error) {
