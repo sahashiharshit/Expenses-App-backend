@@ -96,7 +96,7 @@ label {
 
 /* Input Fields */
 input {
-  width: 100%;
+  width: 80%;
   padding: 0.5rem 1rem;
   border: 1px solid var(--gray-300);
   border-radius: 0.375rem; /* Rounded corners */
@@ -115,6 +115,7 @@ input:focus {
 
 /* Button */
 button {
+  margin-top: 1rem;
   width: 100%;
   background-color: var(--blue-500);
   color: white;
