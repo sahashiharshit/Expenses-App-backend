@@ -27,8 +27,9 @@ async function signupuser(event) {
     errormsg.innerHTML = `<p style="font-size:20px ;color:red">Signup failed, ${error.response.data.message}</p> `;
   }
 }
-async function userlogin(event) {
-alert('hello');
+
+document.getElementById('login').addEventListener('submit',async(event)=>{
+  alert('hello');
   event.preventDefault();
   const password = document.querySelector("#loginpassword").value;
   const email = document.querySelector("#loginemail").value;
@@ -53,5 +54,7 @@ alert('hello');
       errormsg.innerHTML = `<p style="font-size:16px ;color:red">Login failed, ${error.response.data.message}</p> `;
     }
   }
-}
+});
+
+
 
