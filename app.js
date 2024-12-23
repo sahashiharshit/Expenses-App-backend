@@ -17,7 +17,7 @@ const Expenses = require("./models/Expenses");
 const Order = require("./models/Orders");
 const ForgotPasswordRequest = require("./models/ForgotPasswordRequest");
 const FileUrls = require("./models/FileUrls");
-const { contentSecurityPolicy } = require("helmet");
+
 
 const app= express();
 const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'),{flags:'a'});
@@ -27,8 +27,12 @@ app.use(cors());
 app.use(helmet({
   contentSecurityPolicy:{
   directives:{
-    defaultSrc:["self"],
-    styleSrc:["'self'",'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css','https://cdn.jsdelivr.net']
+    directives: {
+      defaultSrc: ["'self'"], // Allows resources from the same origin
+      styleSrc: ["'self'", 'https://cdn.jsdelivr.net'], // Allows styles from self and the CDN
+      scriptSrc: ["'self'", "'unsafe-inline'"], // Example for scripts
+      imgSrc: ["'self'", 'data:'], // Allow images from self and inline data URIs
+  }
   
   }
   }
