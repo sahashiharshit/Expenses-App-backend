@@ -146,7 +146,7 @@ document.getElementById('buyPremiumButton').addEventListener('click',async()=>{
         },
         { headers: { Authorization: token } }
       );
-      const premiumdiv = document.querySelector("#buyPremium");
+      const premiumdiv = document.querySelector("#button-section");
       const premiumButton = document.querySelector("#buyPremiumButton");
       premiumdiv.removeChild(premiumButton);
       premiumdiv.innerHTML = `<p>You are a Premium User.</p>
