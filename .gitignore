@@ -5,3 +5,4 @@ ExpenseSecureKey.pem
 .idea
 pnpm-lock.yaml
 
+access.log
