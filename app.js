@@ -17,13 +17,22 @@ const Expenses = require("./models/Expenses");
 const Order = require("./models/Orders");
 const ForgotPasswordRequest = require("./models/ForgotPasswordRequest");
 const FileUrls = require("./models/FileUrls");
+const { contentSecurityPolicy } = require("helmet");
 
 const app= express();
 const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'),{flags:'a'});
 
 app.use(express.json());
 app.use(cors());
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy:{
+  directives:{
+    defaultSrc:["self"],
+    styleSrc:["'self'",'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css','https://cdn.jsdelivr.net']
+  
+  }
+  }
+}));
 app.use(morgan("combined",{stream:accessLogStream}))
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use('/', express.static(path.join(__dirname, 'views')));
