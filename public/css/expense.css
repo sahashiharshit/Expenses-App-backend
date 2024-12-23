@@ -21,6 +21,7 @@ body {
     border-radius: 0.5rem; /* Rounded corners (Tailwind: rounded-lg) */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow (Tailwind: shadow-md) */
     margin: 1rem auto; /* Center alignment and spacing */
+    width: fit-content;
   }
   
   /* Form Styles */
