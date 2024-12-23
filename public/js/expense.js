@@ -269,7 +269,7 @@ async function showOldReports() {
                 <button class="btn btn-outline-success btn-sm" onclick="downloadOldFiles('${
                   urls.fileUrl
                 }')">
-                <i class="fa fa-download">
+                <i class="fa fa-download">Download
                 </i>
                 </button>
                 </td>
