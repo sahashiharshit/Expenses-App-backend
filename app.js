@@ -51,6 +51,7 @@ app.use("/premium", premium);
 app.use("/password", authentication);
 
 app.get("/", (req, res) => {
+console.log(__dirname);
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 app.get("*", (req, res) => {
