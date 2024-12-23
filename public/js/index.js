@@ -28,6 +28,7 @@ async function signupuser(event) {
   }
 }
 async function userlogin(event) {
+alert('hello');
   event.preventDefault();
   const password = document.querySelector("#loginpassword").value;
   const email = document.querySelector("#loginemail").value;
