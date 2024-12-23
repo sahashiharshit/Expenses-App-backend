@@ -33,17 +33,18 @@ app.use("/premium",premium);
 app.use("/password",authentication);
 
 app.get('/',(req,res)=>{
-res.sendFile(path.join(__dirname, 'public/views','index.html'));
+res.sendFile(path.join(__dirname, 'views','index.html'));
 
 });
 app.get('*',(req,res)=>{
   const requestedUrl = req.url;
-  if(requestedUrl.startsWith('public/views/')){
-  res.sendFile(path.join(__dirname,requestedUrl));
-  
-  }else{
-    res.sendFile(path.join(__dirname,'public',requestedUrl));
+  const filePath = requestedUrl.startsWith('views')?path.join(__dirname,requestedUrl):path.join(__dirname,'public',requestedUrl);
+  res.sendFile(filePath,(err)=>{
+    if (err) {
+      console.error('Error serving file:', err.message);
+      res.status(404).send('File not found');
   }
+  });
 });
 
 User.hasMany(Expenses);
