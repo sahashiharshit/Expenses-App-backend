@@ -98,7 +98,7 @@ function renderExpenses(expenses) {
                 <td>
                 <button class="btn btn-outline-danger btn-sm" onclick="deleteExpense(${
                   expense.id
-                },${expense.money})">
+                },${expense.money})">Delete
                 <i class="fa fa-trash-alt">
                 </i>
                 </button>
