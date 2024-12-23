@@ -21,9 +21,28 @@ body {
     border-radius: 0.5rem; /* Rounded corners (Tailwind: rounded-lg) */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow (Tailwind: shadow-md) */
     margin: 1rem auto; /* Center alignment and spacing */
-    width: fit-content;
+    
+    display: flex; /* Enable flexbox */
+  gap: 2rem; /* Space between form and table */
+  justify-content: space-between; /* Align items with space between them */
+  align-items: flex-start; /* Align items at the top */
+  flex-wrap: wrap; /* Wrap items on smaller screens */
   }
-  
+  .form-container,
+.table-container {
+  background-color: #ffffff; /* Optional: white background */
+  padding: 1.5rem; /* Padding inside */
+  border-radius: 0.5rem; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+.form-container{
+  max-width: 45%;
+  flex: 1;
+  }
+  .table-container{
+    flex: 2;
+  max-width: 50%;
+  }
   /* Form Styles */
   form {
     display: flex;
@@ -32,7 +51,7 @@ body {
   }
   
   input, select {
-    width: 100%; /* Full width (Tailwind: w-full) */
+    width: 90%; /* Full width (Tailwind: w-full) */
     padding: 0.75rem 1rem; /* Padding inside input fields (Tailwind: px-4 py-2) */
     border: 1px solid #d1d5db; /* Light gray border (Tailwind: border-gray-300) */
     border-radius: 0.375rem; /* Rounded input fields (Tailwind: rounded-lg) */
@@ -54,6 +73,7 @@ body {
     border-radius: 0.375rem; /* Rounded corners (Tailwind: rounded-lg) */
     font-weight: bold; /* Bold text (Tailwind: font-bold) */
     transition: background-color 0.2s, box-shadow 0.2s; /* Smooth hover transitions */
+    margin-bottom: 1rem;
   }
   
   /* Button Variants */
@@ -158,4 +178,13 @@ body {
     background-color: #e5e7eb; /* Gray button */
     color: #4b5563; /* Medium gray text */
   }
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column; /* Stack items vertically on smaller screens */
+    }
   
+    .form-container,
+    .table-container {
+      max-width: 100%; /* Allow full width on small screens */
+    }
+  }
