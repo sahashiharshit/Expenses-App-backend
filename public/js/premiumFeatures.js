@@ -4,7 +4,7 @@ async function fetchLeaderBoard() {
     try {
     console.log("geting til here")
         const response = await axios.get("https://hsexpensetracker.duckdns.org/premium/showleaderboard");
-        
+        console.log(response);
         displayBoard(response.data);
     } catch (error) {
                 
