@@ -15,6 +15,7 @@ async function fetchLeaderBoard() {
 }
 
 function displayBoard(data){
+    console.log("in display method")
     const leaderboardDiv = document.getElementById('leaderboard');
     leaderboardDiv.innerHTML = `
     <h2 class="text-center" >Leader Board</h2>
