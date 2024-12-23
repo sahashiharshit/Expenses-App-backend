@@ -34,7 +34,7 @@ function displayBoard(data){
                     (user,index) => `
                 <tr>
                     <th scope="row">${index+1}</th>
-                    <td>${user.username}</td>
+                    <td>${user.email}</td>
                     <td>${user.totalExpenses}</td>
                 </tr>
             `
