@@ -63,7 +63,8 @@ app.get("*", (req, res) => {
   const filePath = requestedUrl.startsWith("views")
     ? path.join(__dirname, requestedUrl)
     : path.join(__dirname, "public", requestedUrl);
-  res.sendFile(filePath, (err) => {
+    console.log(filePath)
+    res.sendFile(filePath, (err) => {
     if (err) {
       console.error("Error serving file:", err.message);
       res.status(404).send("File not found");
