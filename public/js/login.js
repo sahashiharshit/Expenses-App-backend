@@ -1,6 +1,6 @@
 
 document.getElementById('loginForm').addEventListener('submit',async(event)=>{
-    alert('hello');
+   
     event.preventDefault();
     const password = document.querySelector("#loginpassword").value;
     const email = document.querySelector("#loginemail").value;

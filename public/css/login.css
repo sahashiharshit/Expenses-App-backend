@@ -93,6 +93,7 @@ input {
   font-size: 1rem; /* Tailwind's base font size */
   color: #1f2937; /* Tailwind's text-gray-800 */
   transition: border-color 0.2s, box-shadow 0.2s; /* Smooth transitions */
+  margin-bottom: 0.5rem;
 }
 
 input:focus {
@@ -113,6 +114,7 @@ button {
   border: none;
   border-radius: 0.375rem; /* Tailwind's rounded-lg */
   cursor: pointer; /* Pointer on hover */
+  margin-top: 1rem;
   transition: background-color 0.2s, box-shadow 0.2s; /* Smooth transitions */
 }
 
