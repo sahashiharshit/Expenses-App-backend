@@ -120,7 +120,7 @@ function renderPagination(currentPage, totalPages,limit) {
   pagination.innerHTML='';
 
   for (let i = 1; i <= totalPages; i++) {
-      pagination.innerHTML+= `<button class="${i === currentPage ? 'btn btn-primary' : 'btn btn-secondary'} " onclick="fetchExpenses(${i},${limit})">${i}</button>`;
+      pagination.innerHTML+= `<button id="paginationButton" class="${i === currentPage ? 'btn btn-primary' : 'btn btn-secondary'} " onclick="fetchExpenses(${i},${limit})">${i}</button>`;
   }
 
 }

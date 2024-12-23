@@ -71,7 +71,7 @@ body {
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Focus ring (Tailwind: focus:ring-blue-500) */
   }
   
-  button {
+  .addButton {
     box-sizing: border-box;
     width: 100%;
     max-width: 100%;
