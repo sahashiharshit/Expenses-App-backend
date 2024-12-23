@@ -27,6 +27,17 @@ const accessLogStream = fs.createWriteStream(
 app.use(express.json());
 app.use(cors());
 
+
+// app.use(helmet());
+app.use(morgan("combined", { stream: accessLogStream }));
+app.use("/", express.static(path.join(__dirname, "public")));
+app.use("/", express.static(path.join(__dirname, "views")));
+app.use("/expense", authentication);
+app.use("/expense", expenses);
+app.use("/purchase", premium);
+app.use("/premium", premium);
+app.use("/password", authentication);
+
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -44,17 +55,6 @@ app.use(
     },
   })
 );
-
-// app.use(helmet());
-app.use(morgan("combined", { stream: accessLogStream }));
-app.use("/", express.static(path.join(__dirname, "public")));
-app.use("/", express.static(path.join(__dirname, "views")));
-app.use("/expense", authentication);
-app.use("/expense", expenses);
-app.use("/purchase", premium);
-app.use("/premium", premium);
-app.use("/password", authentication);
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
