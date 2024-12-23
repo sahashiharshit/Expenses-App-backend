@@ -26,14 +26,6 @@ const accessLogStream = fs.createWriteStream(
 
 app.use(express.json());
 app.use(cors());
-app.use((req, res, next) => {
-  res.locals.nonce = crypto.randomBytes(16).toString('base64'); // Generate a random nonce
-  res.setHeader(
-    'Content-Security-Policy',
-    `script-src 'self' 'nonce-${res.locals.nonce}';`
-  );
-  next();
-});
 
 app.use(
   helmet({
