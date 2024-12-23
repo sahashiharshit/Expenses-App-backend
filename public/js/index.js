@@ -28,7 +28,7 @@ async function signupuser(event) {
   }
 }
 
-document.getElementById('login').addEventListener('submit',async(event)=>{
+document.getElementById('loginForm').addEventListener('submit',async(event)=>{
   alert('hello');
   event.preventDefault();
   const password = document.querySelector("#loginpassword").value;
