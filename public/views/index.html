@@ -5,50 +5,58 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://cdn.tailwindcss.com/;">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline';">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline';">
   <title>Sign up</title>
   <link rel="stylesheet" href="../css/signup.css">
-  
-  
-  <script src="https://cdn.tailwindcss.com" ></script>
+
+
+
 
 
 </head>
 
-<body  class="bg-gray-100 flex items-center justify-center h-screen">
+<body class="bg-gray-100 flex items-center justify-center h-screen">
   <div class="bg-white p-6 rounded-lg shadow-md w-96">
     <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Sign Up to Expenses App</h2>
-      <form id="signupForm" class="space-y-4" >
-        <div>
-          <label for="username" class="block text-sm font-medium text-gray-700">Name</label>
-          <input type="text" name="username" id="username" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"  required />
-        </div>
-        <div>
-          <label for="useremail" class="block text-sm font-medium text-gray-700">Email</label>
-          <input type="email" name="useremail" id="useremail" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" 
-            required />
-          
-        </div>
-        <div>
-          <label for="userpassword" class="block text-sm font-medium text-gray-700">Password</label>
-          <input type="password" name="userpassword" id="userpassword" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" 
-            required />
-         
-        </div>
-        <div>
-          <button id="signup" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Sign Up</button>
-        </div>~
-      </form>
-      <p class="text-sm text-center text-gray-600 mt-4">
-        Already have an account?
-        <a href="../views/login.html" class="text-blue-500 hover:underline"> Log in</a>
-      </p>
-      
+    <form id="signupForm" class="space-y-4">
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700">Name</label>
+        <input type="text" name="username" id="username"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          required />
+      </div>
+      <div>
+        <label for="useremail" class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="email" name="useremail" id="useremail"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          required />
+
+      </div>
+      <div>
+        <label for="userpassword" class="block text-sm font-medium text-gray-700">Password</label>
+        <input type="password" name="userpassword" id="userpassword"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          required />
+
+      </div>
+      <div>
+        <button id="signup"
+          class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Sign
+          Up</button>
+      </div>~
+    </form>
+    <p class="text-sm text-center text-gray-600 mt-4">
+      Already have an account?
+      <a href="../views/login.html" class="text-blue-500 hover:underline"> Log in</a>
+    </p>
+
     <div id="error"></div>
   </div>
   <script src="../js/index.js"></script>
-  
-<script src="../js/axios.min.js"></script>
+
+  <script src="../js/axios.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </body>
 
 </html>

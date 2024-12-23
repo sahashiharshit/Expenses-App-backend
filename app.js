@@ -26,18 +26,19 @@ const accessLogStream = fs.createWriteStream(
 
 app.use(express.json());
 app.use(cors());
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"], // Allows resources from the same origin
-        styleSrc: ["'self'", "https://cdn.jsdelivr.net"], // Allows styles from self and the CDN
-        scriptSrc: ["'self'", "'unsafe-inline'"], // Example for scripts
-        imgSrc: ["'self'", "data:"], // Allow images from self and inline data URIs
-      },
-    },
-  })
-);
+// app.use(
+//   helmet({
+//     contentSecurityPolicy: {
+//       directives: {
+//         defaultSrc: ["'self'"], // Allows resources from the same origin
+//         styleSrc: ["'self'", "https://cdn.jsdelivr.net"], // Allows styles from self and the CDN
+//         scriptSrc: ["'self'", "'unsafe-inline'"], // Example for scripts
+//         imgSrc: ["'self'", "data:"], // Allow images from self and inline data URIs
+//       },
+//     },
+//   })
+// );
+app.use(helmet());
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/", express.static(path.join(__dirname, "views")));
