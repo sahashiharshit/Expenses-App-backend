@@ -40,12 +40,19 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://checkout.razorpay.com", "'unsafe-inline'"],
-        scriptSrcElem:["'self'", "https://checkout.razorpay.com"]
+        scriptSrc: ["'self'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
+        scriptSrcElem: ["'self'", "https://checkout.razorpay.com"],  // Explicitly allow Razorpay script
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:"],
+        fontSrc: ["'self'", "https:", "data:"],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
       },
     },
   })
 );
+
 // app.use(helmet());
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use("/", express.static(path.join(__dirname, "public")));
