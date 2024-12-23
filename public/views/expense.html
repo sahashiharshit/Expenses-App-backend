@@ -18,16 +18,19 @@
 
       <form id="expenseForm" class="needs-validation">
         <div class="col-12 form-floating mb-3">
-          <input type="text" name="expense" id="expense" class="form-control" placeholder="Trip to london" required />
-          <label for="expense" class="form-label">Expense Name</label>
+          <label for="expense" >Expense Name</label>
+          <input type="text" name="expense" id="expense"   required />
+          
         </div>
 
         <div class="col-12 form-floating mb-3">
-          <input type="number" name="money" id="money" class="form-control" placeholder="100" required />
-          <label for="money" class="form-label">Money</label>
+          <label for="money" >Money</label>
+          <input type="number" name="money" id="money"  required />
+          
         </div>
 
         <div class="col-12 form-floating mb-3">
+          <label for="category" >Category</label>
           <select class="form-select" id="category" name="category" required>
             <option value="" selected disabled>Select a category</option>
             <option value="Food">Food</option>
@@ -35,7 +38,7 @@
             <option value="Entertainment">Entertainment</option>
             <option value="Other">Other</option>
           </select>
-          <label for="category" class="">Category</label>
+          
           <div class="invalid-feedback">
             Select a category.
           </div>
