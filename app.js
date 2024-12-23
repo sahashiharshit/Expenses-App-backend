@@ -35,12 +35,7 @@ app.use(
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
         scriptSrcElem: ["'self'", "https://checkout.razorpay.com"],  // Explicitly allow Razorpay script
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:"],
-        fontSrc: ["'self'", "https:", "data:"],
-        objectSrc: ["'none'"],
-        // baseUri: ["'self'"],
-        formAction: ["'self'"],
+        
       },
     },
   })
