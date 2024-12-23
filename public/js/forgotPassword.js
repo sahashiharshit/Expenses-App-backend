@@ -1,4 +1,4 @@
-async function forgotPassword(event) {
+document.getElementById('forgot-password-form').addEventListener('submit',async(event)=>{
   event.preventDefault();
   const email = document.querySelector("#email").value;
   try {
@@ -19,4 +19,7 @@ async function forgotPassword(event) {
       alert("error in sending email try again");
     }
   }
-}
+
+
+});
+  

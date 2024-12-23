@@ -12,7 +12,7 @@ async function verify(token) {
         if (error.status===404){
             document.getElementById('resetPasswordForm').style.display='none';
             document.getElementById('expiredLink').innerHTML=`Link Expired!! 
-            <a href="http://127.0.0.1:5500/login.html">click here to go to login page</a> `;
+            <a href="https://hsexpensetracker.duckdns.org/views/login.html">click here to go to login page</a> `;
             }
        
     }
@@ -33,7 +33,7 @@ try {
 
     const data = response.data;
     alert(data.message);
-       window.location.assign('login.html');
+       window.location.assign('views/login.html');
 } catch (error) {
     alert(error);
 }

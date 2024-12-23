@@ -1,5 +1,5 @@
 //function to add expense to database
-async function addExpenses(event) {
+document.getElementById('expenseForm').addEventListener('submit',async(event)=>{
   event.preventDefault();
 
   const money = document.querySelector("#money").value;
@@ -22,7 +22,10 @@ async function addExpenses(event) {
   } catch (error) {
     console.log(error);
   }
-}
+});
+ 
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const expensesPerPageDropdown = document.getElementById('expensesPerPage');
   let userPreference = localStorage.getItem('expensesPerPage') || 10;
@@ -124,8 +127,7 @@ function renderPagination(currentPage, totalPages,limit) {
 
 
 //function to buy premium membership
-
-async function buyPremium(e) {
+document.getElementById('buyPremiumButton').addEventListener('click',async()=>{
   const token = localStorage.getItem("AuthToken");
   const response = await axios.get(
     "https://hsexpensetracker.duckdns.org/purchase/premiummembership",
@@ -170,7 +172,15 @@ async function buyPremium(e) {
 
     alert("Payment Failed!!!");
   });
-}
+})
+ 
+
+
+
+
+
+
+
 //functions to check Premium Membership
 
 async function checkPremium() {

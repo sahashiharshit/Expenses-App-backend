@@ -1,5 +1,5 @@
 console.log("Javascript Loaded")
-async function signupuser(event) {
+document.getElementById('signupForm').addEventListener('submit',async(event)=>{
   event.preventDefault();
   const username = document.querySelector("#username").value;
   const password = document.querySelector("#userpassword").value;
@@ -26,7 +26,9 @@ async function signupuser(event) {
    console.log(error)
     errormsg.innerHTML = `<p style="font-size:20px ;color:red">Signup failed, ${error.response.data.message}</p> `;
   }
-}
+});
+
+
 
 document.getElementById('loginForm').addEventListener('submit',async(event)=>{
   alert('hello');
