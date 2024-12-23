@@ -187,7 +187,7 @@ async function checkPremium() {
   const token = localStorage.getItem("AuthToken");
   const ispremiumuser = await checkPremiumMembership(token);
   if (ispremiumuser) {
-    const premiumdiv = document.querySelector("#buyPremium");
+    const premiumdiv = document.querySelector("#button-section");
     const premiumButton = document.querySelector("#buyPremiumButton");
     premiumdiv.removeChild(premiumButton);
     premiumdiv.innerHTML = `<p>You are a Premium User.</p>
