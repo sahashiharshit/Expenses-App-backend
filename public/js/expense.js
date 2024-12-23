@@ -235,6 +235,7 @@ async function deleteExpense(expenseId, money) {
 
 async function downloadfile() {
   const token = localStorage.getItem("AuthToken");
+  console.log("getting there");
   try {
     const response = await axios.get("https://hsexpensetracker.duckdns.org/premium/download", {
       headers: { Authorization: token },
