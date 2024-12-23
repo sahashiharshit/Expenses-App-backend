@@ -146,7 +146,7 @@ document.getElementById('buyPremiumButton').addEventListener('click',async()=>{
         },
         { headers: { Authorization: token } }
       );
-      const premiumdiv = document.querySelector("#button-section");
+      const premiumdiv = document.querySelector("#premiumsection");
       const premiumButton = document.querySelector("#buyPremiumButton");
       premiumdiv.removeChild(premiumButton);
       premiumdiv.innerHTML = `<p>You are a Premium User.</p>
@@ -187,7 +187,7 @@ async function checkPremium() {
   const token = localStorage.getItem("AuthToken");
   const ispremiumuser = await checkPremiumMembership(token);
   if (ispremiumuser) {
-    const premiumdiv = document.querySelector("#button-section");
+    const premiumdiv = document.querySelector("#premiumsection");
     const premiumButton = document.querySelector("#buyPremiumButton");
     premiumdiv.removeChild(premiumButton);
     premiumdiv.innerHTML = `<p>You are a Premium User.</p>
