@@ -151,7 +151,8 @@ document.getElementById('buyPremiumButton').addEventListener('click',async()=>{
       premiumdiv.removeChild(premiumButton);
       premiumdiv.innerHTML = `<p>You are a Premium User.</p>
             <button class="btn btn-outline-info ml-2" id="leaderBoard" onclick="fetchLeaderBoard()">Show Leaderboard</button>
-           
+           <button class="btn btn-outline-success mt-2" id="fileDownload" onclick="downloadfile()" disabled>Create
+      Report</button>
         `;
       const downloadBtn = document.getElementById("fileDownload");
       downloadBtn.disabled = false;
@@ -192,7 +193,8 @@ async function checkPremium() {
     premiumdiv.removeChild(premiumButton);
     premiumdiv.innerHTML = `<p>You are a Premium User.</p>
             <button class="btn btn-outline-info ml-2" id="leaderBoard" onclick="fetchLeaderBoard()">Show Leaderboard</button>
-           
+           <button class="btn btn-outline-success mt-2" id="fileDownload" onclick="downloadfile()" disabled>Create
+      Report</button>
         `;
     const downloadBtn = document.getElementById("fileDownload");
 
