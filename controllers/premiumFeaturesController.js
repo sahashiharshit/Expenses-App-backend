@@ -10,7 +10,7 @@ const { v4: uuidv4 } = require("uuid");
 exports.showLeaderBoard = async (req, res) => {
   try {
     const leaderBoard = await User.findAll({
-      attributes: ["id", "username", "totalExpenses"],
+      attributes: ["id", "email", "totalExpenses"],
       order: [[Sequelize.literal("totalExpenses"), "Desc"]],
     });
     res.status(200).json(leaderBoard);
