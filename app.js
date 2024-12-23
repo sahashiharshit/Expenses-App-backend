@@ -41,6 +41,7 @@ app.use(
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'", "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://checkout.razorpay.com", "'unsafe-inline'"],
+        scriptSrcElem:["'self'", "https://checkout.razorpay.com"]
       },
     },
   })
