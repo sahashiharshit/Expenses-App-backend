@@ -2,22 +2,22 @@
 async function fetchLeaderBoard() {
     
     try {
-    console.log("geting til here")
+    
         const response = await axios.get("https://hsexpensetracker.duckdns.org/premium/showleaderboard");
-        console.log(response);
+       
         displayBoard(response.data);
     } catch (error) {
                 
-        console.log('Error fetching leaderboard:');     
+        
         const leaderboardDiv = document.getElementById('leaderboard');
         leaderboardDiv.innerHTML=`${error.response.data.message}`;
     }
 }
 
 function displayBoard(data){
-    console.log("in display method")
+   
     const leaderboardDiv = document.getElementById('leaderboard');
-    console.log(leaderboardDiv)
+    
     leaderboardDiv.innerHTML = `
     <h2 class="text-center" >Leader Board</h2>
     <table class="table table-hover">
