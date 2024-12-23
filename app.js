@@ -39,7 +39,7 @@ app.use(
         imgSrc: ["'self'", "data:"],
         fontSrc: ["'self'", "https:", "data:"],
         objectSrc: ["'none'"],
-        baseUri: ["'self'"],
+        // baseUri: ["'self'"],
         formAction: ["'self'"],
       },
     },
