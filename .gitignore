@@ -5,3 +5,5 @@ ExpenseSecureKey.pem
 .idea
 pnpm-lock.yaml
 access.log
+cssec-3.0.0.tgz
+eventemitter2-5.0.1.tgz
