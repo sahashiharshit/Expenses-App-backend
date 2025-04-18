@@ -3,7 +3,7 @@ document.getElementById('forgot-password-form').addEventListener('submit',async(
   const email = document.querySelector("#email").value;
   try {
     const response = await axios.post(
-      "https://hsexpensetracker.duckdns.org/password/forgotpassword",
+      "http://loalhost:3000/password/forgotpassword",
       {
         email: email,
       }

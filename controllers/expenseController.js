@@ -1,35 +1,33 @@
-const { Sequelize } = require("sequelize");
+
 const Expenses = require("../models/Expenses");
 const User = require("../models/Users");
-const sequelize = require("../utils/database");
+
 
 exports.addExpenses = async (req, res) => {
   const { money, expenseName, category } = req.body;
-  const userId = req.user.id;
-  const t = await sequelize.transaction();
+  const amount = Number(money);
+  const userId = req.user._id;
+ 
   try {
-    const newExpense = await Expenses.create(
+    const newExpense = new Expenses(
       {
-        money: money,
+        money: amount,
         expenseName: expenseName,
         category: category,
         userId: userId,
       },
-      {
-        transaction: t,
-      }
+     
     );
-    await User.update(
+    await newExpense.save();
+    await User.findByIdAndUpdate(userId,
       {
-        totalexpenses: Sequelize.literal(`totalexpenses+${money}`),
-      },
-      { where: { id: userId }, transaction: t }
-    );
+        $inc: { totalexpenses: amount }, // Increment the total expenses by the money spent
+      },{new:true}
+      );
 
-    await t.commit();
     res.status(200).json(newExpense);
     } catch (error) {
-    await t.rollback();
+   
     res.status(400).json({
       error: error,
       message: "Expense not added",
@@ -42,17 +40,17 @@ exports.getExpenses = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     // Default values
-    const offset = (page - 1) * limit;
+    const skip = (page - 1) * limit;
   
-    const userId = req.user.id;
-    const { rows: expenses, count } = await Expenses.findAndCountAll({
-      where:{userId:userId},
-      limit: parseInt(limit),
-      offset: parseInt(offset),
-      order: [['createdAt', 'DESC']],
-  });
+    const userId = req.user._id;
+    const [ expenses, count ] = await Promise.all(
+    [
+    Expenses.find({ userId }).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit)),
+    Expenses.countDocuments({ userId }),
+    ]
+    );
     
-    if (expenses) {
+    if (expenses.length>0) {
       res.json({
         expenses,
         totalExpenses: count,
@@ -72,9 +70,9 @@ exports.getExpenses = async (req, res) => {
 exports.deleteExpense = async (req, res) => {
   const id = req.params.id;
   const money = req.query.money;
-  
+  console.log(id,money)
   const user = req.user;
-  const t =await sequelize.transaction();
+  
   
   try { 
   

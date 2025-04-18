@@ -6,17 +6,18 @@ document.getElementById('signupForm').addEventListener('submit',async(event)=>{
   const email = document.querySelector("#useremail").value;
   const errormsg = document.querySelector("#error");
   try {
-    const response = await axios.post("https://hsexpensetracker.duckdns.org/expense/signup", {
+    const response = await axios.post("http://localhost:3000/expense/signup", {
       username: username,
       email: email,
       password: password,
     });
+    console.log(response);
     if (response.status == 200) {
       document.getElementById("username").value = "";
       document.getElementById("userpassword").value = "";
       document.getElementById("useremail").value = "";
       // console.log("Signup successfull",response);
-      window.location.assign('login.html');
+      window.location.assign('views/login.html');
     } else {
       //console.log("Signup failed", response.statusText);
       error.innerHTML = `"Signup failed",${response.status} `;

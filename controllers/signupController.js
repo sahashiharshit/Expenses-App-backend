@@ -1,31 +1,34 @@
 const User = require("../models/Users");
-const bcrypt = require('bcrypt');
+
 
 exports.signupUser = async (req, res) => {
   const { username, email, password } = req.body;
-
-  try {
   
-   const saltRounds= 15;
-   const hashedPassword = await bcrypt.hash(password,saltRounds);
-    const newUser = await User.create({
-      username: username,
-      email: email,
-      password: hashedPassword,
-    });
-    res.status(200).json({data:newUser});
-  } catch (error) {
-    if(error.name==="SequelizeUniqueConstraintError"){
-      res.status(500).json({
-        message: "Email id already exist",
-        error: error,
-      });
-    }else{
-      res.status(500).json({
-        message: "Error in Signing up user.",
-        error: error,
+  try {
+    const existingUser = await User.findOne({  email });
+    if (existingUser) {
+      return res.status(409).json({
+        message: "User already exists",
       });
     }
-   
+    const newUser = new User({
+      username,
+      email,
+      password,
+    });
+   const savedUser =  await newUser.save();
+  
+   console.log("User signed up successfully", savedUser);
+    res.status(200).json({
+      message: "User signed up successfully",
+      data: savedUser,
+    });
+  } catch (error) {
+  console.error("Error during signup:", error);
+    if (error.code === 11000 && error.keyPattern?.email) {
+      res.status(400).json({ message: "Email already exists", error });
+    } 
+      res.status(500).json({ message: "Signup failed", error:error.message });
+    
   }
 };

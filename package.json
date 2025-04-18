@@ -1,47 +1,34 @@
 {
-  "name": "expenses-app",
-  "version": "1.0.0",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon start"
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "axios": "^1.8.4",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.2",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.10.1",
+    "path-to-regexp": "^8.2.0",
+    "razorpay": "^2.9.6",
+    "tailwindcss": "^4.1.4",
+    "uuid": "^11.1.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sahashiharshit/Expenses-App-backend.git"
-  },
-  "keywords": [
-    "Node",
-    "Express"
-  ],
-  "author": "Harshit",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sahashiharshit/Expenses-App-backend/issues"
-  },
-  "homepage": "https://github.com/sahashiharshit/Expenses-App-backend#readme",
-  "description": "",
   "devDependencies": {
     "nodemon": "^3.1.9"
   },
-  "dependencies": {
-    "@getbrevo/brevo": "^2.2.0",
-    "aws-sdk": "^2.1692.0",
-    "axios": "^1.7.9",
-    "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
-    "cssesc": "file:cssesc-3.0.0.tgz",
-    "dotenv": "^16.4.7",
-    "eventemitter2": "file:eventemitter2-5.0.1.tgz",
-    "express": "^4.21.2",
-    "helmet": "^8.0.0",
-    "jsonwebtoken": "^9.0.2",
-    "morgan": "^1.10.0",
-    "mysql2": "^3.11.5",
-    "nodemailer": "^6.9.16",
-    "razorpay": "^2.9.5",
-    "sequelize": "^6.37.5",
-    "tailwindcss": "^3.4.16",
-    "uuid": "^11.0.3"
-  }
+  "name": "expenses-app",
+  "version": "1.0.0",
+  "description": "Expense tracker app",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "harshit sah",
+  "license": "ISC"
 }

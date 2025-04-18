@@ -9,7 +9,7 @@ document.getElementById('expenseForm').addEventListener('submit',async(event)=>{
   try {
     const token = localStorage.getItem("AuthToken");
     const response = await axios.post(
-      "https://hsexpensetracker.duckdns.org/expense/add",
+      "http://localhost:3000/expense/add",
       {
         money: money,
         expenseName: expenseName,
@@ -17,7 +17,7 @@ document.getElementById('expenseForm').addEventListener('submit',async(event)=>{
       },
       { headers: { Authorization: token } }
     );
-
+    console.log(response.data);
     fetchExpenses(1);
   } catch (error) {
     console.log(error);
@@ -54,7 +54,7 @@ async function fetchExpenses(page=1,limit=10) {
   try {
     const token = localStorage.getItem("AuthToken");
     const response = await axios.get(
-      "https://hsexpensetracker.duckdns.org/expense/getExpenses",
+      "http://localhost:3000/expense/getExpenses",
       {params:
       { 
       page:page,
@@ -63,6 +63,7 @@ async function fetchExpenses(page=1,limit=10) {
       headers: { Authorization: token } }
     );
     const data = response.data;
+   
     renderExpenses(data.expenses);
     renderPagination(data.currentPage,data.totalPages,limit);
   } catch (error) {
@@ -75,7 +76,7 @@ async function fetchExpenses(page=1,limit=10) {
 //function to fetching expenses from backend
 function renderExpenses(expenses) {
   const container = document.getElementById("expense-table");
-  //container.innerHTML='';
+  
   container.innerHTML = `
     <table id="expenses-content" class="table table-striped table-bordered">
       <thead>
@@ -90,15 +91,15 @@ function renderExpenses(expenses) {
       </tbody>
       
   ${expenses.map((expense, index) => `
-            <tr id="expense-${expense.id}">
+            <tr id="expense-${expense._id}">
                 <td>${index + 1}</td>
                 <td>${expense.expenseName}</td>
                 <td>${expense.money}</td>
                 <td>${expense.category}</td>
                 <td>
-                <button class="btn btn-outline-danger btn-sm" onclick="deleteExpense(${
-                  expense.id
-                },${expense.money})">Delete
+                <button class="btn btn-outline-danger btn-sm" onclick="deleteExpense('${
+                  expense._id
+                }','${expense.money}')">Delete
                 <i class="fa fa-trash-alt">
                 </i>
                 </button>
@@ -130,7 +131,7 @@ function renderPagination(currentPage, totalPages,limit) {
 document.getElementById('buyPremiumButton').addEventListener('click',async()=>{
   const token = localStorage.getItem("AuthToken");
   const response = await axios.get(
-    "https://hsexpensetracker.duckdns.org/purchase/premiummembership",
+    "http://localhost:3000/purchase/premiummembership",
     { headers: { Authorization: token } }
   );
 
@@ -139,7 +140,7 @@ document.getElementById('buyPremiumButton').addEventListener('click',async()=>{
     order_id: response.data.order.id,
     handler: async function (response) {
       await axios.post(
-        "https://hsexpensetracker.duckdns.org/purchase/updatetransactionstatus",
+        "http://localhost:3000/purchase/updatetransactionstatus",
         {
           order_id: options.order_id,
           payment_id: response.razorpay_payment_id,
@@ -163,7 +164,7 @@ document.getElementById('buyPremiumButton').addEventListener('click',async()=>{
   e.preventDefault();
   rzp1.on("payment.failed", async function (res) {
     await axios.post(
-      "https://hsexpensetracker.duckdns.org/purchase/updatefailedtransactionstatus",
+      "http://localhost:3000/purchase/updatefailedtransactionstatus",
       {
         order_id: res.error.metadata.order_id,
         payment_id: res.error.metadata.payment_id,
@@ -204,7 +205,7 @@ async function checkPremium() {
 
 async function checkPremiumMembership(token) {
   const status = await axios.get(
-    "https://hsexpensetracker.duckdns.org/purchase/checkpremium",
+    "http://loalhost:3000/purchase/checkpremium",
     { headers: { Authorization: token } }
   );
   return status.data.ispremiumuser;
@@ -213,11 +214,12 @@ async function checkPremiumMembership(token) {
 //function to delete Expense
 
 async function deleteExpense(expenseId, money) {
+  console.log(expenseId, money);
   try {
     const token = localStorage.getItem("AuthToken");
 
     const response = await axios.delete(
-      `https://hsexpensetracker.duckdns.org/expense/deleteExpense/${expenseId}`,
+      `http://loalhost:3000/expense/deleteExpense/${expenseId}`,
 
       {
         headers: { Authorization: token },
@@ -239,7 +241,7 @@ async function downloadfile() {
   const token = localStorage.getItem("AuthToken");
   console.log("getting there");
   try {
-    const response = await axios.get("https://hsexpensetracker.duckdns.org/premium/download", {
+    const response = await axios.get("http://loalhost:3000/premium/download", {
       headers: { Authorization: token },
     });
     window.open(response.data, "_blank");
@@ -252,7 +254,7 @@ async function showOldReports() {
   const token = localStorage.getItem("AuthToken");
   try {
     const response = await axios.get(
-      "https://hsexpensetracker.duckdns.org/premium/oldReports",
+      "http://loalhost:3000/premium/oldReports",
       {
         headers: { Authorization: token },
       }

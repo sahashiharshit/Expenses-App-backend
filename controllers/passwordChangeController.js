@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
-const brevo = require("@getbrevo/brevo");
+const nodemailer = require("nodemailer");
 const ForgotPasswordRequest = require("../models/ForgotPasswordRequest");
 const User = require("../models/Users");
 const bcrypt =require('bcrypt');
@@ -22,36 +22,27 @@ exports.forgotPassword = async (req, res) => {
     const resetToken = uuidv4();
 
     const resetLink = `http://127.0.0.1:5500/frontend/reset-password.html?token=${resetToken}`;
-    const defaultClient = brevo.ApiClient.instance;
-    const apiKey = defaultClient.authentications["api-key"];
-    apiKey.apiKey = process.env.SMTP_API_KEY;
-    const apiInstance = new brevo.TransactionalEmailsApi();
-
-    const sendSmtpEmail = new brevo.SendSmtpEmail();
-    sendSmtpEmail.subject = "{{params.subject}}";
-
-    sendSmtpEmail.htmlContent = `<h1>Password Reset Request</h1>
+    
+    const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Password Reset Request",
+      html: `<h1>Password Reset Request</h1>  
          <p>Hello,</p>
          <p>You requested to reset your password. Click the link below to reset your password:</p>
         <a href="${resetLink}" style="color: #007bff; text-decoration: none;">Reset Password</a>
-        <p>If you did not request this, please ignore this email.</p>`;
-    sendSmtpEmail.sender = {
-      name: "Expense Tracker dev team",
-      email: process.env.EMAIL,
+        <p>If you did not request this, please ignore this email.</p>`
+    
     };
-    sendSmtpEmail.to = [{ email: email, name: "User" }];
-    sendSmtpEmail.replyTo = {
-      email: "no-reply@gmail.com",
-      name: "Dev team",
-    };
-    sendSmtpEmail.headers = { id: "unique-id-1234" };
-    sendSmtpEmail.params = {
-      parameter: "My param value",
-      subject: " Password Reset Request",
-    };
-
-    await apiInstance.sendTransacEmail(sendSmtpEmail);
-
+    await transporter.sendMail(mailOptions);
+    
     await ForgotPasswordRequest.create({
       id: resetToken,
       isActive: true,

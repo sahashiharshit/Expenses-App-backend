@@ -11,7 +11,11 @@ try {
    
     const userid = jwt.verify(token,privateKey);
     
-    User.findByPk(userid).then(user=>{
+    
+    User.findById({_id:userid}).then(user=>{
+    if(!user){
+        return res.status(401).json({message:'Unauthorized User'});
+    }
     req.user=user;
    
     next();
