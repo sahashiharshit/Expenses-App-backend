@@ -14,18 +14,26 @@
     "nodemailer": "^6.10.1",
     "path-to-regexp": "^8.2.0",
     "razorpay": "^2.9.6",
-    "tailwindcss": "^4.1.4",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/postcss": "^4.1.5",
+    "@tailwindcss/typography": "^0.5.16",
+    "autoprefixer": "^10.4.21",
+    "nodemon": "^3.1.9",
+    "postcss": "^8.5.3",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^4.1.5"
   },
   "name": "expenses-app",
   "version": "1.0.0",
   "description": "Expense tracker app",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "start": "node app.js",
+    "build": "postcss public/css/tailwind.css -o public/css/style.css ",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

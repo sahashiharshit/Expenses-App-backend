@@ -1,12 +1,12 @@
-const express = require("express");
-const { login } = require("../controllers/loginController");
-const { signupUser } = require("../controllers/signupController");
+import { Router } from "express";
+import { login } from "../controllers/loginController.js";
+import { signupUser } from "../controllers/signupController.js";
 // const { resetPassword, forgotPassword, verifyToken } = require("../controllers/passwordChangeController");
-const router = express.Router();
+const router = Router();
 
 router.post("/signup", signupUser);
 router.post("/login", login);
 // router.post("/forgotpassword",forgotPassword);
 // router.post("/reset-password",resetPassword);
 // router.get("/verify-token/:token",verifyToken);
-module.exports = router;
+export default router;

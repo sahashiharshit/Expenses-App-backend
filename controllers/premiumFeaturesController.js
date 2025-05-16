@@ -1,34 +1,30 @@
-require("dotenv").config();
 
-const User = require("../models/Users");
-const AWS = require("aws-sdk");
-const FileUrls = require("../models/FileUrls");
-const sequelize = require("../utils/database");
-const { Sequelize } = require("sequelize");
-const { v4: uuidv4 } = require("uuid");
 
-exports.showLeaderBoard = async (req, res) => {
+import Users from "../models/Users.js";
+//import { S3 } from "aws-sdk";
+//import { create, findAll } from "../models/FileUrls.js";
+
+
+
+export async function showLeaderBoard(req, res) {
   try {
-    const leaderBoard = await User.findAll({
-      attributes: ["id", "email", "totalExpenses"],
-      order: [[Sequelize.literal("totalExpenses"), "Desc"]],
-    });
+    const leaderBoard = await Users.find().sort({ totalexpenses: -1 });
     res.status(200).json(leaderBoard);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Failed to fetch leaderboard." });
   }
-};
+}
 
-exports.downloadfile = async (req, res) => {
-  const t = await sequelize.transaction();
+export async function downloadfile(req, res) {
+  const t = await _transaction();
   try {
     const uuid = uuidv4();
     const expenses = await req.user.getExpenses();
     const data = JSON.stringify(expenses);
     const filename = `Expenses${req.user.id}/${new Date()}.txt`;
     const fileUrl = await uploadToS3(data, filename);
-    await FileUrls.create(
+    await create(
       {
         id: uuid,
         fileUrl: fileUrl.Location,
@@ -43,13 +39,13 @@ exports.downloadfile = async (req, res) => {
     await t.rollback();
     console.log(error);
   }
-};
+}
 async function uploadToS3(data, filename) {
   const BUCKET_NAME = process.env.BUCKET_NAME;
   const IAM_ACCESS_KEY = process.env.IAM_ACCESS_KEY;
   const IAM_SECRET_KEY = process.env.SECRET_ACCESS_KEY;
 
-  const s3bucket = new AWS.S3({
+  const s3bucket = new S3({
     accessKeyId: IAM_ACCESS_KEY,
     secretAccessKey: IAM_SECRET_KEY,
   });
@@ -69,10 +65,10 @@ async function uploadToS3(data, filename) {
   }
 }
 
-exports.oldReports = async (req, res) => {
+export async function oldReports(req, res) {
   try {
     const userId = req.user.id;
-    const reports = await FileUrls.findAll({ where: { userId: userId } });
+    const reports = await findAll({ where: { userId: userId } });
     //console.log(reports);
     if (!reports) {
       res.status(404).json({ message: "No files found" });
@@ -81,4 +77,4 @@ exports.oldReports = async (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
-};
+}

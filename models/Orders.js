@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const orderSchema = new mongoose.Schema({
+const orderSchema = new Schema({
   paymentid: {
     type: String,
     required: false,
@@ -14,12 +14,12 @@ const orderSchema = new mongoose.Schema({
     required: false,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User', // Assuming each order belongs to a user
     required: true,
   }
 }, { timestamps: true });
 
 
-module.exports  = mongoose.model('Order', orderSchema);
+export default model('Order', orderSchema);
 

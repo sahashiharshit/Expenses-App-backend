@@ -1,20 +1,20 @@
 
-async function fetchLeaderBoard() {
+const fetchLeaderBoard=async()=> {
     
     try {
     
-        const response = await axios.get("http://loalhost:3000/premium/showleaderboard");
-       
-        displayBoard(response.data);
+        const {data} = await axios.get("http://localhost:3000/premium/showleaderboard");
+        
+        displayBoard(data);
     } catch (error) {
                 
         
         const leaderboardDiv = document.getElementById('leaderboard');
-        leaderboardDiv.innerHTML=`${error.response.data.message}`;
+        leaderboardDiv.innerHTML=`${error.data.message}`;
     }
 }
 
-function displayBoard(data){
+const displayBoard=data=>{
    
     const leaderboardDiv = document.getElementById('leaderboard');
     
@@ -34,8 +34,8 @@ function displayBoard(data){
                     (user,index) => `
                 <tr>
                     <th scope="row">${index+1}</th>
-                    <td>${user.email}</td>
-                    <td>${user.totalExpenses}</td>
+                    <td>${user.username}</td>
+                    <td>${user.totalexpenses}</td>
                 </tr>
             `
                 )

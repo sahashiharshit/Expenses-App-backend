@@ -1,144 +1,239 @@
+//Function to hide all sections
+const hideAllSections = () => {
+  document.querySelectorAll(".app-section").forEach((section) => {
+    section.classList.add("hidden");
+  });
+};
+
+// Set up navigation button event listeners
+const setupNavButtons = () => {
+  document.querySelectorAll(".nav-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-target");
+      hideAllSections();
+      const targetSection = document.getElementById(targetId);
+
+      targetSection?.classList.remove("hidden");
+    });
+  });
+};
+//populate categories in the dropdown
+
+const populateCategories = async () => {
+  try {
+    const { data: categories } = await axios.get(
+      "http://localhost:3000/expense/getCategories"
+    );
+    const select = document.getElementById("category");
+    select.innerHTML = "";
+    const defaultOption = new Option("-- Select Category --", "");
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    select.appendChild(defaultOption);
+
+    categories.forEach(({ _id, categoryName }) => {
+      const option = new Option(categoryName, _id);
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.log("Error fetching categories:", error);
+  }
+};
+
 //function to add expense to database
-document.getElementById('expenseForm').addEventListener('submit',async(event)=>{
-  event.preventDefault();
+const expenseform = document.getElementById("expenseForm");
+expenseform.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
   const money = document.querySelector("#money").value;
   const expenseName = document.querySelector("#expense").value;
-  const category = document.querySelector("#category").value;
+  const categoryId = document.querySelector("#category").value;
 
   try {
     const token = localStorage.getItem("AuthToken");
-    const response = await axios.post(
+    await axios.post(
       "http://localhost:3000/expense/add",
       {
-        money: money,
-        expenseName: expenseName,
-        category: category,
+        money,
+        expenseName,
+        categoryId,
       },
       { headers: { Authorization: token } }
     );
-    console.log(response.data);
-    fetchExpenses(1);
+    expenseform.reset();
+    hideAllSections();
+    document.getElementById("expenseListSection").classList.remove("hidden");
+    const userPreference = localStorage.getItem("expensesPerPage") || 5;
+    loadBudgetData(userPreference); 
   } catch (error) {
     console.log(error);
   }
 });
- 
 
+// income form event listener
+const incomeForm = document.getElementById("incomeForm");
+incomeForm.addEventListener("submit", async (e) => {
+e.preventDefault();
+const token = localStorage.getItem("AuthToken");
+const amount = document.querySelector("#amount").value;
 
-document.addEventListener('DOMContentLoaded', () => {
-  const expensesPerPageDropdown = document.getElementById('expensesPerPage');
-  let userPreference = localStorage.getItem('expensesPerPage') || 10;
+const {data} = await axios.post('http://localhost:3000/expense/income/add', {
+  amount,
+}, 
+{headers:{
+  Authorization:token,
+},});
+incomeForm.reset();
+hideAllSections();
+document.getElementById("expenseListSection").classList.remove("hidden");
+const userPreference = localStorage.getItem("expensesPerPage") || 5;
+loadBudgetData(userPreference);
+});
+
+const loadBudgetData=async(userPreference=5)=>{
+
+try{
+  const {data} = await axios.get('http://localhost:3000/expense/getBudget',{headers:{Authorization:localStorage.getItem('AuthToken')}});
+  console.log(data);
+  //update income,remaining budget and month in the UI
+  document.getElementById('currentMonth').innerText = new Date(data.month).toLocaleDateString('en-GB',{
+  month:'short',
+  year:'numeric',
+  });
+  document.getElementById('percentage').innerText = `${data.percentUsed}% of 100%`;
+  document.getElementById('totalIncome').innerText = `₹${data.income}`;
+  
+  document.getElementById('remainingBudget').innerText = `₹${data.remaining}`;
+  
+  //fetch and display expenses
+  
+  fetchExpenses(1,userPreference);
+}catch(error){
+
+}
+
+}
+window.addEventListener("DOMContentLoaded", () => {
+  setupNavButtons();
+  populateCategories();
+  checkPremium();
+  document.getElementById("expenseForm").reset();
+
+  const expensesPerPageDropdown = document.getElementById("expensesPerPage");
+  let userPreference = localStorage.getItem("expensesPerPage") || 5;
 
   // Set the dropdown to reflect the stored preference
   expensesPerPageDropdown.value = userPreference;
-
-  // Fetch and display expenses based on the preference
-  fetchExpenses(1, userPreference);
+  loadBudgetData(userPreference); 
 
   // Update the preference when the user selects a new value
-  expensesPerPageDropdown.addEventListener('change', () => {
-      userPreference = expensesPerPageDropdown.value;
-      localStorage.setItem('expensesPerPage', userPreference);
-      fetchExpenses(1, userPreference); // Reload expenses with new limit
+  expensesPerPageDropdown.addEventListener("change", () => {
+    userPreference = expensesPerPageDropdown.value;
+    localStorage.setItem("expensesPerPage", userPreference);
+    loadBudgetData(userPreference); // Reload expenses with new limit
+  });
+
+  const logoutButton = document.getElementById("logout");
+  logoutButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    const answer = confirm("Are you sure you want to logout?");
+    if (answer) {
+      localStorage.removeItem("AuthToken");
+      localStorage.removeItem("expensesPerPage");
+      window.location.href = "/views/login.html";
+    }
   });
 });
 
-
-
-
-
-
 //Function to display expenses
-async function fetchExpenses(page=1,limit=10) {
+const fetchExpenses = async (page = 1, limit) => {
   try {
     const token = localStorage.getItem("AuthToken");
-    const response = await axios.get(
+    const { data } = await axios.get(
       "http://localhost:3000/expense/getExpenses",
-      {params:
-      { 
-      page:page,
-      limit:limit,
-      },
-      headers: { Authorization: token } }
+      {
+        params: {
+          page: page,
+          limit: limit,
+        },
+        headers: { Authorization: token },
+      }
     );
-    const data = response.data;
-   
+
     renderExpenses(data.expenses);
-    renderPagination(data.currentPage,data.totalPages,limit);
+    renderPagination(data.currentPage, data.totalPages, limit);
   } catch (error) {
     console.log("Error Fetching expenses".error);
   }
-  
-  
-}
+};
 
 //function to fetching expenses from backend
-function renderExpenses(expenses) {
-  const container = document.getElementById("expense-table");
-  
-  container.innerHTML = `
-    <table id="expenses-content" class="table table-striped table-bordered">
-      <thead>
-        <tr >
-          <th scope="col">#</th>
-          <th scope="col">Expense Name</th>
-          <th scope="col">Money Spend</th>
-          <th scope="col">Category of Expense</th>
-          <th scope="col">Delete</th>
-        </tr>
-      <tbody id="expense-body">
-      </tbody>
-      
-  ${expenses.map((expense, index) => `
-            <tr id="expense-${expense._id}">
-                <td>${index + 1}</td>
-                <td>${expense.expenseName}</td>
-                <td>${expense.money}</td>
-                <td>${expense.category}</td>
-                <td>
-                <button class="btn btn-outline-danger btn-sm" onclick="deleteExpense('${
+const renderExpenses = (expenses) => {
+  const container = document.getElementById("expense-body");
+  if (!expenses.length) {
+    container.innerHTML = `<p class="text-gray-500 text-center">No expenses found.</p>`;
+    return;
+  }
+  container.innerHTML = expenses
+    .map(
+      (expense, index) => `
+            <tr id="expense-${
+              expense._id
+            }" class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 ">${index + 1}</td>
+                <td class="px-6 py-4">${expense.expenseName}</td>
+                <td class="px-6 py-4 ">${expense.money}</td>
+                <td class="px-6 py-4 ">${expense.categoryId.categoryName}</td>
+                <td class="px-6 py-4 ">${new Date(expense.date).toLocaleDateString('en-GB',{
+                  day: '2-digit',
+                  month:'short',
+                  year:'numeric',
+                })}</td>
+                <td class="px-6 py-4 text-center">
+                <button class="text-red-600 hover:text-red-800 font-medium" onclick="deleteExpense('${
                   expense._id
-                }','${expense.money}')">Delete
-                <i class="fa fa-trash-alt">
-                </i>
-                </button>
+                }','${expense.money}')">Delete</button>
                 </td>
-            </tr>
-        `
-    ).join("")}
-    </tbody>
-    </table>`
-    ;
-  
-    document.querySelector("#money").value = "";
-    document.querySelector("#expense").value = "";
-    document.querySelector("#category").value = "";
-}
+            </tr>`
+    )
+    .join("");
 
-function renderPagination(currentPage, totalPages,limit) {
-  const pagination = document.querySelector('#pagination');
-  pagination.innerHTML='';
+  ["#money", "#expense", "#category"].forEach(
+    (id) => (document.querySelector(id).value = "")
+  );
+};
+
+const renderPagination = (currentPage, totalPages, limit) => {
+  const pagination = document.querySelector("#pagination");
+  pagination.innerHTML = "";
 
   for (let i = 1; i <= totalPages; i++) {
-      pagination.innerHTML+= `<button id="paginationButton" class="${i === currentPage ? 'btn btn-primary' : 'btn btn-secondary'} " onclick="fetchExpenses(${i},${limit})">${i}</button>`;
+    const button = document.createElement("button");
+    button.className = `px-4 py-2 rounded-md border text-sm transition font-medium ${
+      i === currentPage
+        ? "bg-indigo-600 text-white border-indigo-600"
+        : "bg-white text-gray-700 border-gray-300 hover:bg-blue-50 hover:border-blue-400"
+    }`;
+    button.textContent = i;
+    button.addEventListener("click", () => fetchExpenses(i, limit));
+    pagination.appendChild(button);
   }
-
-}
-
+};
 
 //function to buy premium membership
-document.getElementById('buyPremiumButton').addEventListener('click',async()=>{
+const buyPremiumButton = document.getElementById("buyPremiumButton");
+buyPremiumButton?.addEventListener("click", async (e) => {
+  e.preventDefault();
   const token = localStorage.getItem("AuthToken");
-  const response = await axios.get(
+  const { data } = await axios.get(
     "http://localhost:3000/purchase/premiummembership",
     { headers: { Authorization: token } }
   );
 
   const options = {
-    key: response.data.key_id,
-    order_id: response.data.order.id,
-    handler: async function (response) {
+    key: data.key_id,
+    order_id: data.order.id,
+    handler: async (response) => {
       await axios.post(
         "http://localhost:3000/purchase/updatetransactionstatus",
         {
@@ -147,22 +242,25 @@ document.getElementById('buyPremiumButton').addEventListener('click',async()=>{
         },
         { headers: { Authorization: token } }
       );
-      const premiumdiv = document.querySelector("#premiumsection");
-      const premiumButton = document.querySelector("#buyPremiumButton");
-      premiumdiv.removeChild(premiumButton);
-      premiumdiv.innerHTML = `<p>You are a Premium User.</p>
-            <button class="btn btn-outline-info ml-2" id="leaderBoard" onclick="fetchLeaderBoard()">Show Leaderboard</button>
-           <button class="btn btn-outline-success mt-2" id="fileDownload" onclick="downloadfile()" disabled>Create
-      Report</button>
-        `;
-      const downloadBtn = document.getElementById("fileDownload");
-      downloadBtn.disabled = false;
-    },
+      const premiumdiv = document.querySelector("#premiumDiv");
+      premiumdiv.innerHTML = `<h3 class="text-2xl font-semibold text-gray-800 mb-4">Premium Features</h3>
+    <p class="text-green-700 font-medium mb-4">🎉 You are a Premium User.</p>
+   <div class="flex flex-col gap-4">
+    <button 
+      class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition" 
+      id="leaderBoard" 
+      onclick="fetchLeaderBoard()">
+      Show Leaderboard
+    </button>
+    
+  </div>`;
+        
+       },
   };
   const rzp1 = new Razorpay(options);
   rzp1.open();
-  e.preventDefault();
-  rzp1.on("payment.failed", async function (res) {
+
+  rzp1.on("payment.failed", async (res) => {
     await axios.post(
       "http://localhost:3000/purchase/updatefailedtransactionstatus",
       {
@@ -174,95 +272,90 @@ document.getElementById('buyPremiumButton').addEventListener('click',async()=>{
 
     alert("Payment Failed!!!");
   });
-})
- 
-
-
-
-
-
-
+});
 
 //functions to check Premium Membership
 
-async function checkPremium() {
+const checkPremium = async () => {
   const token = localStorage.getItem("AuthToken");
   const ispremiumuser = await checkPremiumMembership(token);
   if (ispremiumuser) {
-    const premiumdiv = document.querySelector("#premiumsection");
-    const premiumButton = document.querySelector("#buyPremiumButton");
-    premiumdiv.removeChild(premiumButton);
-    premiumdiv.innerHTML = `<p>You are a Premium User.</p>
-            <button class="btn btn-outline-info ml-2" id="leaderBoard" onclick="fetchLeaderBoard()">Show Leaderboard</button>
-           <button class="btn btn-outline-success mt-2" id="fileDownload" onclick="downloadfile()" disabled>Create
-      Report</button>
-        `;
-    const downloadBtn = document.getElementById("fileDownload");
+    const premiumdiv = document.querySelector("#premiumDiv");
 
-    downloadBtn.disabled = false;
+    premiumdiv.innerHTML = `
+    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Premium Features</h3>
+    <p class="text-green-700 font-medium mb-4">🎉 You are a Premium User.</p>
+   <div class="flex flex-col gap-4">
+    <button 
+      class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition" 
+      id="leaderBoard" 
+      onclick="fetchLeaderBoard()">
+      Show Leaderboard
+    </button>
+    
+  </div>`;
+    document.getElementById("fileDownload").disabled = false;
   }
-}
+};
 
-async function checkPremiumMembership(token) {
-  const status = await axios.get(
-    "http://loalhost:3000/purchase/checkpremium",
+const checkPremiumMembership = async (token) => {
+  const { data } = await axios.get(
+    "http://localhost:3000/purchase/checkpremium",
     { headers: { Authorization: token } }
   );
-  return status.data.ispremiumuser;
-}
+  return data.ispremiumuser;
+};
 
 //function to delete Expense
 
-async function deleteExpense(expenseId, money) {
-  console.log(expenseId, money);
+const deleteExpense = async (expenseId, money) => {
   try {
+    const userPreference = localStorage.getItem("expensesPerPage") || 5;
     const token = localStorage.getItem("AuthToken");
 
-    const response = await axios.delete(
-      `http://loalhost:3000/expense/deleteExpense/${expenseId}`,
+    const response = await axios.post(
+      `http://localhost:3000/expense/deleteExpense/${expenseId}`,
+      { money },
 
       {
         headers: { Authorization: token },
-        params: { money: money },
       }
     );
     if (response.status == 200) {
       // Remove the expense from the frontend
-      document.getElementById(`expense-${expenseId}`).remove();
-    } else {
-      const error = await response.json();
+      document.getElementById(`expense-${expenseId}`)?.remove();
+      fetchExpenses(1, userPreference);
     }
   } catch (error) {
     console.error("Error deleting expense:");
-   }
-}
+  }
+};
 
-async function downloadfile() {
+const downloadfile = async () => {
   const token = localStorage.getItem("AuthToken");
-  console.log("getting there");
+
   try {
-    const response = await axios.get("http://loalhost:3000/premium/download", {
+    const { data } = await axios.get("http://localhost:3000/premium/download", {
       headers: { Authorization: token },
     });
-    window.open(response.data, "_blank");
+    window.open(data, "_blank");
   } catch (error) {
     console.log("Something went wrong");
   }
-}
+};
 
-async function showOldReports() {
+const showOldReports = async () => {
   const token = localStorage.getItem("AuthToken");
   try {
-    const response = await axios.get(
-      "http://loalhost:3000/premium/oldReports",
+    const { data } = await axios.get(
+      "http://localhost:3000/premium/oldReports",
       {
         headers: { Authorization: token },
       }
     );
-    
-    const data = response.data;
+
     const container = document.getElementById("reports-body");
-    container.innerHTML = `${data
+    container.innerHTML = data
       .map(
         (urls, index) => `
                 <tr>
@@ -277,23 +370,20 @@ async function showOldReports() {
                 </i>
                 </button>
                 </td>
-            </tr>
-        `
+            </tr>`
       )
-      .join("")}
-        
-        `;
+      .join("");
   } catch (error) {
     console.log("Not able to find old reports");
     //alert("Not able to find old reports");
   }
-}
+};
 
-function downloadOldFiles(fileUrl) {
+const downloadOldFiles = (fileUrl) => {
   window.open(fileUrl, "_blank");
-}
+};
 
-function trimUrl(url, maxLength) {
+const trimUrl = (url, maxLength) => {
   if (url.length <= maxLength) {
     return url; // No trimming needed
   }
@@ -302,16 +392,12 @@ function trimUrl(url, maxLength) {
   const path = urlObject.pathname; // Get the path part of the URL
   const trimmedPath =
     path.length > maxLength - domain.length - 3
-      ? path.substring(0, maxLength - domain.length - 3) + "..."
+      ? `${path.substring(0, maxLength - domain.length - 3)}...`
       : path;
   return `${domain}${trimmedPath}`;
-}
+};
 
-function formatDateTime(isoString) {
+const formatDateTime = (isoString) => {
   const date = new Date(isoString);
-  const formattedDate = date.toLocaleDateString(); // Localized date (e.g., "11/20/2024")
-  const formattedTime = date.toLocaleTimeString(); // Localized time (e.g., "5:11:45 PM")
-  return `${formattedDate} ${formattedTime}`;
-}
-//window.onload = checkPremium();
-window.onload = fetchExpenses().then(checkPremium).then(showOldReports);
+  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+};

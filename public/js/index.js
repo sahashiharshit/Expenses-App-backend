@@ -17,7 +17,7 @@ document.getElementById('signupForm').addEventListener('submit',async(event)=>{
       document.getElementById("userpassword").value = "";
       document.getElementById("useremail").value = "";
       // console.log("Signup successfull",response);
-      window.location.assign('views/login.html');
+      window.location.href = "/views/login.html";
     } else {
       //console.log("Signup failed", response.statusText);
       error.innerHTML = `"Signup failed",${response.status} `;

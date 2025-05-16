@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const userSchema = new mongoose.Schema(
+import { Schema, model } from "mongoose";
+import { genSalt, hash } from "bcrypt";
+const userSchema = new Schema(
   {
     username: {
       type: String,
@@ -36,8 +36,8 @@ console.log("Pre-save hook triggered for password hashing.");
     return next();
   }
   try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    const salt = await genSalt(10);
+    this.password = await hash(this.password, salt);
     console.log("Password hashed successfully.");
     next();
   } catch (error) {
@@ -45,4 +45,4 @@ console.log("Pre-save hook triggered for password hashing.");
     next(error);
   }
 });
-module.exports = mongoose.model("User", userSchema);
+export default model("User", userSchema);

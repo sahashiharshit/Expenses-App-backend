@@ -1,31 +1,30 @@
-const express = require("express");
-const cors = require("cors");
-const morgan = require("morgan");
-const path = require("path");
-const fs = require("fs");
-require("dotenv").config();
-const mongoose = require("mongoose");
+import express from "express";
+import cors from "cors";
+import path from "path";
+import dotenv from "dotenv";
+import { connect } from "mongoose";
 
-const authentication = require("./routes/authenticationRoute");
- const expenses = require("./routes/expenseRoute");
-// const premium = require("./routes/premiumRoute");
+import authentication from "./routes/authenticationRoute.js";
+import expenses from "./routes/expenseRoute.js";
+import premium from "./routes/premiumRoute.js";
 
+import { fileURLToPath } from "url";
+
+dotenv.config({ path: "./.env"});
 const app = express();
-// const accessLogStream = fs.createWriteStream(
-//   path.join(__dirname, "access.log"),
-//   { flags: "a" }
-// );
+const _filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(_filename);
 
 app.use(express.json());
 app.use(cors());
 
 // app.use(morgan("combined", { stream: accessLogStream }));
-app.use("/", express.static(path.join(__dirname, "public")));
+app.use( express.static(path.join(__dirname, "public")));
 app.use("/views", express.static(path.join(__dirname, "views")));
 app.use("/expense", authentication);
- app.use("/expense", expenses);
-// app.use("/purchase", premium);
-// app.use("/premium", premium);
+app.use("/expense", expenses);
+app.use("/purchase", premium);
+app.use("/premium", premium);
 // app.use("/password", authentication);
 
 app.get("/", (req, res) => {
@@ -33,23 +32,10 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 
-// app.get("*", (req, res) => {
-//   const requestedUrl = req.url;
-//   const filePath = requestedUrl.startsWith("views")
-//     ? path.join(__dirname, requestedUrl)
-//     : path.join(__dirname, "public", requestedUrl);
-  
-//   res.sendFile(filePath, (err) => {
-//     if (err) {
-//       console.error("Error serving file:", err.message);
-//       res.status(404).send("File not found");
-//     }
-//   });
-// });
 
 
-mongoose
-  .connect(process.env.MONGODB_URI)
+
+connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(process.env.PORT || 3000, () => {

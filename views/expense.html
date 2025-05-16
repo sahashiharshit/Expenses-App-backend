@@ -4,110 +4,207 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
+  <meta name="description" content="Expense Tracker Application">
+  <meta name="keywords" content="Expense Tracker, Budgeting, Personal Finance">
+  <meta name="author" content="Harshit Sah">
 
- 
   <title>Expenses</title>
-
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="../js/axios.min.js"></script>
-  <link rel="stylesheet" href="../css/expense.css">
+  <link rel="stylesheet" href="/css/style.css">
+
 </head>
 
-<body>
-  <!--Expense form-->
-  <div class="container d-flex align-items-start justify-content-between" id="expenseApp">
-    <div class="form-container">
-      <h3 class="mb-4 text-center">Add expenses here</h3>
+<body class="h-screen flex bg-gray-100">
 
-      <form id="expenseForm" class="needs-validation">
-        <div class="col-12 form-floating mb-3">
-          <label for="expense" >Expense Name</label>
-          <input type="text" name="expense" id="expense"   required />
-          
-        </div>
+  <aside class="w-64 bg-indigo-600 text-white flex flex-col justify-between ">
+    <div>
+      <nav class="mt-6 space-y-4">
 
-        <div class="col-12 form-floating mb-3">
-          <label for="money" >Money</label>
-          <input type="number" name="money" id="money"  required />
-          
-        </div>
+        <button class="nav-btn w-full text-left px-4 py-2 hover:bg-indigo-700 rounded"
+          data-target="expenseListSection">Expenses</button>
+        <button class="nav-btn w-full text-left px-4 py-2 hover:bg-indigo-700 rounded" data-target="expenseApp">Add
+          Expense</button>
+        <button class="nav-btn w-full text-left px-4 py-2 hover:bg-indigo-700 rounded" data-target="income">Add
+          Income</button>
+        <button class="nav-btn w-full text-left px-4 py-2 hover:bg-indigo-700 rounded" data-target="oldReports">Old
+          Reports</button>
+        <button class="nav-btn w-full text-left px-4 py-2 hover:bg-indigo-700 rounded"
+          data-target="premiumsection">Premium</button>
 
-        <div class="col-12 form-floating mb-3">
-          <label for="category" >Category</label>
-          <select class="form-select" id="category" name="category" required>
-            <option value="" selected disabled>Select a category</option>
-            <option value="Food">Food</option>
-            <option value="Hotel">Hotel</option>
-            <option value="Electricity">Electricity</option>
-            <option value="Internet">Internet</option>
-            <option value="Travel">Travel</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="Other">Other</option>
-          </select>
-          
-          <div class="invalid-feedback">
-            Select a category.
-          </div>
-        </div>
-
-        <button type="submit" class=" addButton btn btn-outline-primary">
-          <i class="fas fa-save"></i> Add
-        </button>
-      </form>
+      </nav>
+      <div class="flex items-center justify-center mt-6">
+        <button id="logout" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"><i
+            class="ri-logout-circle-r-line"> Logout</i> </button>
+      </div>
     </div>
 
+  </aside>
 
 
-    <div class="table-container">
-      <h3 class="text-center">List of Expenses</h3>
-      <div>
-        <label for="expensesPerPage">Expenses per page:</label>
-        <select id="expensesPerPage">
+  <main class="flex-1 ml-64 p-6 bg-gray-100 min-h-screen space-y-10">
+
+    <!-- Expense Form Section -->
+    <section id="expenseApp" class="app-section bg-white hidden rounded-2xl shadow-md p-8 max-w-xl mx-auto ">
+      <h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">Add an Expense</h3>
+      <form id="expenseForm" class="space-y-4">
+        <div>
+          <label for="expense" class="block text-sm font-medium text-gray-700 mb-1">Expense Name</label>
+          <input type="text" name="expense" id="expense" required
+            class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+        </div>
+        <div>
+          <label for="money" class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+          <input type="number" name="money" id="money" required
+            class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+        </div>
+        <div>
+          <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+          <select id="category" name="category" required
+            class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+
+          </select>
+        </div>
+        <button type="submit"
+          class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition flex items-center justify-center gap-2">
+          <i class="fas fa-save"></i> Add Expense
+        </button>
+      </form>
+    </section>
+
+    <!-- Income Form Section -->
+    <section id="income" class="app-section bg-white hidden rounded-2xl shadow-md p-8 max-w-xl mx-auto ">
+      <h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">Add an Income</h3>
+      <form id="incomeForm" class="space-y-4">
+        <div>
+          <label for="income" class="block text-sm font-medium text-gray-700 mb-1">Income Name</label>
+          <input type="text" name="income" id="income" required
+            class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+        </div>
+        <div>
+          <label for="money" class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+          <input type="number" name="amount" id="amount" required
+            class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+        </div>
+        <button type="submit"
+          class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition flex items-center justify-center gap-2">
+          <i class="fas fa-save"></i> Add Income
+        </button>
+      </form>
+      </section>
+
+
+    <!-- Expense List Section -->
+    <section id="expenseListSection"
+      class="app-section max-w-6xl mx-auto bg-white shadow-xl rounded-2xl p-6 overflow-x-auto">
+      <h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">List of Expenses</h3>
+      <!-- Current Month, Total Income, Remaining Budget -->
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex flex-col">
+          <span class="text-gray-700 font-medium text-sm">Current Date</span>
+          <span id="currentMonth" class="text-lg font-semibold text-gray-800">January 2025</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-700 font-medium text-sm">Percentage</span>
+          <span id="percentage" class="text-lg font-semibold text-gray-800"></span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-700 font-medium text-sm">Total Income</span>
+          <span id="totalIncome" class="text-lg font-semibold text-gray-800">₹5000</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-700 font-medium text-sm">Remaining Budget</span>
+          <span id="remainingBudget" class="text-lg font-semibold text-gray-800">₹2000</span>
+        </div>
+        </div>
+        <!-- Per Page Selector-->
+      <div class="flex justify-end items-center mb-4">
+        <label for="expensesPerPage" class="mr-2 text-sm font-medium text-gray-700">Per page:</label>
+        <select id="expensesPerPage"
+          class="border border-gray-300 rounded-md px-4 py-2 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="20">20</option>
           <option value="40">40</option>
         </select>
       </div>
-      <div id="expense-table"></div>
-
-      <div id="pagination" class="pagination">
-        <!-- Dynamic pagination buttons -->
+      <!-- Expense Table -->
+      <div id="expense-table" class="overflow-x-auto">
+        <table id="expenses-content"
+          class="min-w-full w-full text-left text-gray-700 border border-gray-200 rounded-lg overflow-hidden table-auto">
+          <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+            <tr>
+              <th class="px-6 py-3 border-b border-gray-200">#</th>
+              <th class="px-6 py-3 border-b border-gray-200">Expense Name</th>
+              <th class="px-6 py-3 border-b border-gray-200">Money Spent <i class="fa-solid fa-indian-rupee-sign"></i>
+              </th>
+              <th class="px-6 py-3 border-b border-gray-200">Category</th>
+              <th class="px-6 py-3 border-b border-gray-200">Date</th>
+              <th class="px-6 py-3 border-b border-gray-200 text-center">Delete</th>
+            </tr>
+          </thead>
+          <tbody id="expense-body" class="divide-y divide-gray-100">
+           <!--Expense Rows will be dynamically inserted here-->
+          </tbody>
+        </table>
       </div>
+      <!-- Pagination Controls -->
+      <div id="pagination" class="flex justify-center mt-6 space-x-2"></div>
+    </section>
 
-    </div>
-  </div>
-  <div id="oldreports">
-    <h3>Old Reports</h3>
-    <table id="reports-table" class="table table-striped table-bordered">
-      <thead>
-        <tr >
-          <th scope="col">#</th>
-          <th scope="col">Report Url</th>
-          <th scope="col">Date Created</th>
-          <th scope="col">Download</th>
-        </tr>
-      <tbody id="reports-body">
-      </tbody>
-      </thead>
-    </table>
-    
-  </div>
 
-  <div class="button-section" id="premiumsection">
-  
-    <button class="btn btn-outline-info mt-2" id="buyPremiumButton">Buy premium</button>
 
-    
+    <!-- Old Reports Section -->
+    <section id="oldReports" class=" app-section bg-white rounded-2xl shadow-md p-8 max-w-5xl mx-auto hidden">
+      <h3 class="text-2xl font-semibold text-gray-800 mb-6">Old Reports</h3>
+      <div class="overflow-x-auto">
+        <button 
+        class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition" 
+        id="fileDownload" 
+        onclick="downloadfile()">
+        Create Report
+      </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm text-gray-700 table-auto">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-2 text-left">#</th>
+              <th class="px-4 py-2 text-left">Report URL</th>
+              <th class="px-4 py-2 text-left">Date Created</th>
+              <th class="px-4 py-2 text-left">Download</th>
+            </tr>
+          </thead>
+          <tbody id="reports-body" class="divide-y divide-gray-200"></tbody>
+        </table>
+      </div>
+      
+    </section>
 
-    
-    
-  </div>
-  <div id="leaderboard"></div>
+    <!-- Premium Section -->
+    <section id="premiumsection"
+      class="app-section bg-white rounded-2xl shadow-md p-8 max-w-xl mx-auto text-center hidden">
+      <div id="premiumDiv" class="inline">
+        <h3 class="text-2xl font-semibold text-gray-800 ">Premium Features</h3>
+        <button id="buyPremiumButton"
+          class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
+          Buy Premium
+        </button>
+      </div>
+      <div id ="leaderboard"></div>
+      
+    </section>
+
+  </main>
+
+
   <script src="../js/expense.js"></script>
   <script src="../js/premiumFeatures.js"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  
+
 </body>
 
 </html>

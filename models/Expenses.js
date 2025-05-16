@@ -1,24 +1,30 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const expenseSchema = new mongoose.Schema({
+const expenseSchema = new Schema({
   money: {
     type: Number,
     required: true,
   },
   expenseName: {
-    type: String, // TEXT in SQL usually maps to String in MongoDB
+    type: String, 
+      
     required: true,
   },
-  category: {
-    type: String,
+  categoryId: {
+    type: Schema.Types.ObjectId,
+    ref: 'ExpenseCategory',
     required: true,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User', // Assuming expenses are linked to a user
     required: true,
+  },
+  date:{
+    type: Date,
+    default: Date.now,
   }
-}, { timestamps: true });
+});
 
-module.exports = mongoose.model('Expense', expenseSchema);
+export default model('Expense', expenseSchema);
 

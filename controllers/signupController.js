@@ -1,7 +1,8 @@
-const User = require("../models/Users");
+
+import User from "../models/Users.js";
 
 
-exports.signupUser = async (req, res) => {
+export async function signupUser(req, res) {
   const { username, email, password } = req.body;
   
   try {
@@ -31,4 +32,4 @@ exports.signupUser = async (req, res) => {
       res.status(500).json({ message: "Signup failed", error:error.message });
     
   }
-};
+}
