@@ -10,6 +10,7 @@ document.getElementById('loginForm').addEventListener('submit',async(event)=>{
         email: email,
         password: password,
       });
+      console.log(response);
       if (response.status == 200) {
      
         localStorage.setItem('AuthToken',response.data.token);
