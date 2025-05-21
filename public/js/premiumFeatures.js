@@ -1,7 +1,7 @@
 const fetchLeaderBoard = async () => {
   try {
     const { data } = await axios.get(
-      "http://localhost:3000/premium/showleaderboard"
+      "https://expenses-app-ja1q.onrender.com/premium/showleaderboard"
     );
     
     displayBoard(data);

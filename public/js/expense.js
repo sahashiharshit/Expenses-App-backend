@@ -25,7 +25,7 @@ const setupNavButtons = () => {
 const populateCategories = async () => {
   try {
     const { data } = await axios.get(
-      "http://localhost:3000/expense/getCategories"
+      "https://expenses-app-ja1q.onrender.com/expense/getCategories"
     );
     categories = data;
     updateCategoryDropdown();
@@ -67,7 +67,7 @@ expenseform.addEventListener("submit", async (e) => {
   try {
     const token = localStorage.getItem("AuthToken");
     await axios.post(
-      "http://localhost:3000/expense/add",
+      "https://expenses-app-ja1q.onrender.com/expense/add",
       {
         money,
         expenseName,
@@ -94,7 +94,7 @@ incomeForm.addEventListener("submit", async (e) => {
   const incomeSource = document.querySelector("#sourceName").value;
 
   const { data } = await axios.post(
-    "http://localhost:3000/expense/income/add",
+    "https://expenses-app-ja1q.onrender.com/expense/income/add",
     {
       incomeSource,
       amount,
@@ -123,7 +123,7 @@ const loadBudgetData = async (limit = 5, page = 1) => {
       localStorage.setItem("month", month);
     }
     const { data } = await axios.get(
-      `http://localhost:3000/expense/getBudget/${month}?page=${page}&limit=${limit}`,
+      `https://expenses-app-ja1q.onrender.com/expense/getBudget/${month}?page=${page}&limit=${limit}`,
       { headers: { Authorization: localStorage.getItem("AuthToken") } }
     );
     //console.log(data);
@@ -275,7 +275,7 @@ buyPremiumButton?.addEventListener("click", async (e) => {
   e.preventDefault();
   const token = localStorage.getItem("AuthToken");
   const { data } = await axios.get(
-    "http://localhost:3000/purchase/premiummembership",
+    "https://expenses-app-ja1q.onrender.com/purchase/premiummembership",
     { headers: { Authorization: token } }
   );
 
@@ -284,7 +284,7 @@ buyPremiumButton?.addEventListener("click", async (e) => {
     order_id: data.order.id,
     handler: async (response) => {
       await axios.post(
-        "http://localhost:3000/purchase/updatetransactionstatus",
+        "https://expenses-app-ja1q.onrender.com/purchase/updatetransactionstatus",
         {
           order_id: options.order_id,
           payment_id: response.razorpay_payment_id,
@@ -310,7 +310,7 @@ buyPremiumButton?.addEventListener("click", async (e) => {
 
   rzp1.on("payment.failed", async (res) => {
     await axios.post(
-      "http://localhost:3000/purchase/updatefailedtransactionstatus",
+      "https://expenses-app-ja1q.onrender.com/purchase/updatefailedtransactionstatus",
       {
         order_id: res.error.metadata.order_id,
         payment_id: res.error.metadata.payment_id,
@@ -348,7 +348,7 @@ const checkPremium = async () => {
 
 const checkPremiumMembership = async (token) => {
   const { data } = await axios.get(
-    "http://localhost:3000/purchase/checkpremium",
+    "https://expenses-app-ja1q.onrender.com/purchase/checkpremium",
     { headers: { Authorization: token } }
   );
   return data.ispremiumuser;
@@ -362,7 +362,7 @@ const deleteExpense = async (expenseId, money) => {
     const token = localStorage.getItem("AuthToken");
 
     const response = await axios.post(
-      `http://localhost:3000/expense/deleteExpense/${expenseId}`,
+      `https://expenses-app-ja1q.onrender.com/expense/deleteExpense/${expenseId}`,
       { money },
 
       {
@@ -383,7 +383,7 @@ const downloadfile = async () => {
   const token = localStorage.getItem("AuthToken");
 
   try {
-    const { data } = await axios.get("http://localhost:3000/premium/download", {
+    const { data } = await axios.get("https://expenses-app-ja1q.onrender.com/premium/download", {
       headers: { Authorization: token },
     });
     window.open(data, "_blank");
@@ -397,7 +397,7 @@ const showOldReports = async () => {
   const token = localStorage.getItem("AuthToken");
   try {
     const { data } = await axios.get(
-      "http://localhost:3000/premium/oldReports",
+      "https://expenses-app-ja1q.onrender.com/premium/oldReports",
       {
         headers: { Authorization: token },
       }

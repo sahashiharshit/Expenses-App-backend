@@ -6,7 +6,7 @@ document.getElementById('signupForm').addEventListener('submit',async(event)=>{
   const email = document.querySelector("#useremail").value;
   const errormsg = document.querySelector("#error");
   try {
-    const response = await axios.post("http://localhost:3000/expense/signup", {
+    const response = await axios.post("https://expenses-app-ja1q.onrender.com/expense/signup", {
       username: username,
       email: email,
       password: password,

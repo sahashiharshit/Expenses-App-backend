@@ -3,7 +3,7 @@ const token = new URLSearchParams(window.location.search).get('token');
 
 async function verify(token) {
     try {
-        const response = await axios.get(`http://loalhost:3000/password/verify-token/${token}`);
+        const response = await axios.get(`https://expenses-app-ja1q.onrender.com/password/verify-token/${token}`);
         
                 
         
@@ -12,7 +12,7 @@ async function verify(token) {
         if (error.status===404){
             document.getElementById('resetPasswordForm').style.display='none';
             document.getElementById('expiredLink').innerHTML=`Link Expired!! 
-            <a href="http://loalhost:3000/views/login.html">click here to go to login page</a> `;
+            <a href="https://expenses-app-ja1q.onrender.com/views/login.html">click here to go to login page</a> `;
             }
        
     }
@@ -25,7 +25,7 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async (e
     const newPassword = document.getElementById('newPassword').value;
 try {
  
-    const response = await axios.post('http://loalhost:3000/password/reset-password', {
+    const response = await axios.post('https://expenses-app-ja1q.onrender.com/password/reset-password', {
         token:token,
         password:newPassword 
         });

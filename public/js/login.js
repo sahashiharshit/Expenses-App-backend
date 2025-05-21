@@ -6,7 +6,7 @@ document.getElementById('loginForm').addEventListener('submit',async(event)=>{
     const email = document.querySelector("#loginemail").value;
     const errormsg = document.querySelector("#error");
     try {
-      const response = await axios.post("http://localhost:3000/expense/login", {
+      const response = await axios.post("https://expenses-app-ja1q.onrender.com/expense/login", {
         email: email,
         password: password,
       });
