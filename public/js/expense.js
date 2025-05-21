@@ -1,3 +1,6 @@
+//global expenses
+let globalExpenses = [];
+let categories = [];
 //Function to hide all sections
 const hideAllSections = () => {
   document.querySelectorAll(".app-section").forEach((section) => {
@@ -21,23 +24,35 @@ const setupNavButtons = () => {
 
 const populateCategories = async () => {
   try {
-    const { data: categories } = await axios.get(
+    const { data } = await axios.get(
       "http://localhost:3000/expense/getCategories"
     );
-    const select = document.getElementById("category");
-    select.innerHTML = "";
-    const defaultOption = new Option("-- Select Category --", "");
-    defaultOption.disabled = true;
-    defaultOption.selected = true;
-    select.appendChild(defaultOption);
-
-    categories.forEach(({ _id, categoryName }) => {
-      const option = new Option(categoryName, _id);
-      select.appendChild(option);
-    });
+    categories = data;
+    updateCategoryDropdown();
   } catch (error) {
     console.log("Error fetching categories:", error);
   }
+};
+const updateCategoryDropdown = (filter = "") => {
+  const categoryList = document.getElementById("categoryList");
+  const categoryInput = document.getElementById("categoryInput");
+  const categorySelect = document.getElementById("category");
+  const filtered = categories.filter((category) =>
+    category.categoryName.toLowerCase().includes(filter.toLowerCase())
+  );
+  categoryList.innerHTML = "";
+  filtered.forEach(({ _id, categoryName }) => {
+    const li = document.createElement("li");
+    li.textContent = categoryName;
+    li.className = "px-4 py-2 hover:bg-gray-100 cursor-pointer";
+    li.addEventListener("click", () => {
+      categoryInput.value = categoryName;
+      categoryList.classList.add("hidden");
+      categorySelect.innerHTML = `<option value="${_id}" selected>${categoryName}</option>`;
+    });
+    categoryList.appendChild(li);
+  });
+  categoryList.classList.toggle("hidden", filtered.length === 0);
 };
 
 //function to add expense to database
@@ -64,7 +79,7 @@ expenseform.addEventListener("submit", async (e) => {
     hideAllSections();
     document.getElementById("expenseListSection").classList.remove("hidden");
     const userPreference = localStorage.getItem("expensesPerPage") || 5;
-    loadBudgetData(userPreference); 
+    loadBudgetData(userPreference);
   } catch (error) {
     console.log(error);
   }
@@ -73,50 +88,76 @@ expenseform.addEventListener("submit", async (e) => {
 // income form event listener
 const incomeForm = document.getElementById("incomeForm");
 incomeForm.addEventListener("submit", async (e) => {
-e.preventDefault();
-const token = localStorage.getItem("AuthToken");
-const amount = document.querySelector("#amount").value;
+  e.preventDefault();
+  const token = localStorage.getItem("AuthToken");
+  const amount = document.querySelector("#amount").value;
+  const incomeSource = document.querySelector("#sourceName").value;
 
-const {data} = await axios.post('http://localhost:3000/expense/income/add', {
-  amount,
-}, 
-{headers:{
-  Authorization:token,
-},});
-incomeForm.reset();
-hideAllSections();
-document.getElementById("expenseListSection").classList.remove("hidden");
-const userPreference = localStorage.getItem("expensesPerPage") || 5;
-loadBudgetData(userPreference);
+  const { data } = await axios.post(
+    "http://localhost:3000/expense/income/add",
+    {
+      incomeSource,
+      amount,
+    },
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  incomeForm.reset();
+  hideAllSections();
+  document.getElementById("expenseListSection").classList.remove("hidden");
+  const userPreference = localStorage.getItem("expensesPerPage") || 5;
+  loadBudgetData(userPreference);
 });
 
-const loadBudgetData=async(userPreference=5)=>{
+const loadBudgetData = async (limit = 5, page = 1) => {
+  try {
+    let month = localStorage.getItem("month");
+    if (!month) {
+      const current = new Date();
+      const year = current.getFullYear();
+      const monthIndex = String(current.getMonth() + 1).padStart(2, "0");
+      month = `${year}-${monthIndex}`;
+      localStorage.setItem("month", month);
+    }
+    const { data } = await axios.get(
+      `http://localhost:3000/expense/getBudget/${month}?page=${page}&limit=${limit}`,
+      { headers: { Authorization: localStorage.getItem("AuthToken") } }
+    );
+    //console.log(data);
+    //update income,remaining budget and month in the UI
+    renderIncome(data);
 
-try{
-  const {data} = await axios.get('http://localhost:3000/expense/getBudget',{headers:{Authorization:localStorage.getItem('AuthToken')}});
-  console.log(data);
-  //update income,remaining budget and month in the UI
-  document.getElementById('currentMonth').innerText = new Date(data.month).toLocaleDateString('en-GB',{
-  month:'short',
-  year:'numeric',
+    //fetch and display expenses
+    globalExpenses = data.expenses;
+    renderExpenses(data.expenses);
+    renderPagination(data.currentPage, data.totalPages, limit);
+  } catch (error) {
+    console.error("Error loading budget data:", error);
+  }
+};
+const renderIncome = (data) => {
+  document.getElementById("currentMonth").innerText = new Date(
+    data.month
+  ).toLocaleDateString("en-GB", {
+    month: "short",
+    year: "numeric",
   });
-  document.getElementById('percentage').innerText = `${data.percentUsed}% of 100%`;
-  document.getElementById('totalIncome').innerText = `₹${data.income}`;
-  
-  document.getElementById('remainingBudget').innerText = `₹${data.remaining}`;
-  
-  //fetch and display expenses
-  
-  fetchExpenses(1,userPreference);
-}catch(error){
+  document.getElementById(
+    "percentage"
+  ).innerText = `${data.percentUsed}% of 100%`;
+  document.getElementById("totalIncome").innerText = `₹${data.income}`;
 
-}
+  document.getElementById("remainingBudget").innerText = `₹${data.remaining}`;
+};
 
-}
 window.addEventListener("DOMContentLoaded", () => {
   setupNavButtons();
   populateCategories();
   checkPremium();
+  showOldReports();
   document.getElementById("expenseForm").reset();
 
   const expensesPerPageDropdown = document.getElementById("expensesPerPage");
@@ -124,7 +165,23 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Set the dropdown to reflect the stored preference
   expensesPerPageDropdown.value = userPreference;
-  loadBudgetData(userPreference); 
+  const monthpicker = document.getElementById("monthpicker");
+  monthpicker.addEventListener("change", async (e) => {
+    const value = e.target.value;
+    const [year, month] = value.split("-");
+    const monthString = `${year}-${month}`;
+    localStorage.setItem("month", monthString);
+    loadBudgetData(userPreference);
+  });
+  const month = new Date().toLocaleDateString("en-GB", {
+    month: "2-digit",
+    year: "numeric",
+  });
+
+  const [monthIndex, year] = month.split("/").map(Number);
+  const monthString = `${year}-${monthIndex}`;
+  localStorage.setItem("month", monthString);
+  loadBudgetData(userPreference);
 
   // Update the preference when the user selects a new value
   expensesPerPageDropdown.addEventListener("change", () => {
@@ -143,29 +200,19 @@ window.addEventListener("DOMContentLoaded", () => {
       window.location.href = "/views/login.html";
     }
   });
+  
+  document.getElementById("categoryInput").addEventListener("input", (e) => {
+    updateCategoryDropdown(e.target.value);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".relative")) {
+      document.getElementById("categoryList").classList.add("hidden");
+    }
+  });
 });
 
 //Function to display expenses
-const fetchExpenses = async (page = 1, limit) => {
-  try {
-    const token = localStorage.getItem("AuthToken");
-    const { data } = await axios.get(
-      "http://localhost:3000/expense/getExpenses",
-      {
-        params: {
-          page: page,
-          limit: limit,
-        },
-        headers: { Authorization: token },
-      }
-    );
-
-    renderExpenses(data.expenses);
-    renderPagination(data.currentPage, data.totalPages, limit);
-  } catch (error) {
-    console.log("Error Fetching expenses".error);
-  }
-};
 
 //function to fetching expenses from backend
 const renderExpenses = (expenses) => {
@@ -184,10 +231,12 @@ const renderExpenses = (expenses) => {
                 <td class="px-6 py-4">${expense.expenseName}</td>
                 <td class="px-6 py-4 ">${expense.money}</td>
                 <td class="px-6 py-4 ">${expense.categoryId.categoryName}</td>
-                <td class="px-6 py-4 ">${new Date(expense.date).toLocaleDateString('en-GB',{
-                  day: '2-digit',
-                  month:'short',
-                  year:'numeric',
+                <td class="px-6 py-4 ">${new Date(
+                  expense.date
+                ).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
                 })}</td>
                 <td class="px-6 py-4 text-center">
                 <button class="text-red-600 hover:text-red-800 font-medium" onclick="deleteExpense('${
@@ -215,7 +264,7 @@ const renderPagination = (currentPage, totalPages, limit) => {
         : "bg-white text-gray-700 border-gray-300 hover:bg-blue-50 hover:border-blue-400"
     }`;
     button.textContent = i;
-    button.addEventListener("click", () => fetchExpenses(i, limit));
+    button.addEventListener("click", () => loadBudgetData(limit, i));
     pagination.appendChild(button);
   }
 };
@@ -254,8 +303,7 @@ buyPremiumButton?.addEventListener("click", async (e) => {
     </button>
     
   </div>`;
-        
-       },
+    },
   };
   const rzp1 = new Razorpay(options);
   rzp1.open();
@@ -285,10 +333,10 @@ const checkPremium = async () => {
     premiumdiv.innerHTML = `
     <h3 class="text-2xl font-semibold text-gray-800 mb-4">Premium Features</h3>
     <p class="text-green-700 font-medium mb-4">🎉 You are a Premium User.</p>
-   <div class="flex flex-col gap-4">
+   <div class="flex flex-col gap-4" id="leaderboard">
     <button 
       class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition" 
-      id="leaderBoard" 
+      id="showleaderBoard" 
       onclick="fetchLeaderBoard()">
       Show Leaderboard
     </button>
@@ -339,6 +387,7 @@ const downloadfile = async () => {
       headers: { Authorization: token },
     });
     window.open(data, "_blank");
+    showOldReports();
   } catch (error) {
     console.log("Something went wrong");
   }
@@ -363,20 +412,15 @@ const showOldReports = async () => {
                 <td>${trimUrl(urls.fileUrl, 40)}</td>
                 <td>${formatDateTime(urls.createdAt)}</td>
                 <td>
-                <button class="btn btn-outline-success btn-sm" onclick="downloadOldFiles('${
-                  urls.fileUrl
-                }')">
-                <i class="fa fa-download">Download
+                <button class="text-center" onclick="downloadOldFiles('${urls.fileUrl}')">
+                <i class="fa fa-download"> Download
                 </i>
                 </button>
                 </td>
             </tr>`
       )
       .join("");
-  } catch (error) {
-    console.log("Not able to find old reports");
-    //alert("Not able to find old reports");
-  }
+  } catch (error) {}
 };
 
 const downloadOldFiles = (fileUrl) => {

@@ -20,11 +20,7 @@ const userSchema = new Schema(
       default: false,
       required: false,
     },
-    totalexpenses: {
-      type: Number,
-      default: 0,
-      required: false,
-    },
+   
   },
   { timestamps: true }
 );

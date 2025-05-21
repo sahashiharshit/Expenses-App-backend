@@ -5,6 +5,10 @@ type:Schema.Types.ObjectId,
 ref:'User',
 required:true,
 },
+incomeSource:{
+type:String,
+required:true,
+},
 amount:{
 type:Number,
 required:true,

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/authentication.js';
 import { purchasepremium, updateTransactionStatus, updateFailedTransactionStatus, checkPremium } from '../controllers/purchaseController.js';
-import { showLeaderBoard } from '../controllers/premiumFeaturesController.js';
+import { createFile, oldReports, showLeaderBoard } from '../controllers/premiumFeaturesController.js';
 
 const router = Router();
 
@@ -11,6 +11,6 @@ const router = Router();
  router.post("/updatetransactionstatus",authenticate,updateTransactionStatus);
  router.post("/updatefailedtransactionstatus",authenticate,updateFailedTransactionStatus);
  router.get("/showleaderboard",showLeaderBoard);
-// router.get('/download',authenticate, downloadfile);
-// router.get('/oldReports',authenticate,oldReports)
+router.get('/download',authenticate, createFile);
+router.get('/oldReports',authenticate,oldReports)
 export default router;
