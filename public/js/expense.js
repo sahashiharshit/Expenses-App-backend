@@ -431,7 +431,7 @@ const downloadOldFiles = async(key) => {
   const token = localStorage.getItem("AuthToken");
   try {
     const {data} = await axios.get(
-      `https://expenses-app-ja1q.onrender.com/premium/downloadold/${encodeURIComponent(key)}`,
+      `https://expenses-app-ja1q.onrender.com/premium/downloadold?key=${key}`,
       {
         headers: { Authorization: token },
       });

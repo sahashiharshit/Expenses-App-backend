@@ -13,5 +13,5 @@ const router = Router();
  router.get("/showleaderboard",showLeaderBoard);
 router.get('/download',authenticate, createFile);
 router.get('/oldReports',authenticate,oldReports)
-router.get('/downloadold/:key',authenticate,downloadOldFile);
+router.get('/downloadold',authenticate,downloadOldFile);
 export default router;

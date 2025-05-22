@@ -171,8 +171,8 @@ export async function oldReports(req, res) {
 }
 
 export async function downloadOldFile(req,res){
-  const key  = decodeURIComponent(req.params.key);
-  console.log(key);
+  const key  = req.query.key;
+  
   
   try{
     const s3Client = new S3Client({
