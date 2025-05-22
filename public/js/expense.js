@@ -406,6 +406,7 @@ const showOldReports = async () => {
     );
     console.log(data);
     const container = document.getElementById("reports-body");
+    console.log(container);
     container.innerHTML = data
       .map(
         (file, index) => `
@@ -413,6 +414,7 @@ const showOldReports = async () => {
                 <td>${index + 1}</td>
                 <td>${trimUrl(file.key, 40)}</td>
                 <td>${formatDateTime(file.createdAt)}</td>
+                <td>${file}</td>
                 <td>
                 <button class="text-center" onclick="downloadOldFiles('${file.key}')">
                 <i class="fa fa-download"> Download
