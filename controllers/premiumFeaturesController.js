@@ -157,7 +157,7 @@ export async function oldReports(req, res) {
   try {
     const userId = req.user._id;
     const reports = await FileUrls.find({ userId }).sort({ createdAt: -1 });
-    //console.log(reports);
+    console.log(reports);
     if (!reports || reports.length === 0) {
       res.status(404).json({ message: "No files found" });
     }
