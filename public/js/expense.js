@@ -431,14 +431,17 @@ const downloadOldFiles = async(key) => {
   const token = localStorage.getItem("AuthToken");
   try {
     const response = await axios.get(
-      `https://expenses-app-ja1q.onrender.com/premium/downloadold/${encodeURIComponent(key)}`,
+      `https://expenses-app-ja1q.onrender.com/premium/downloadold/${key}`,
       {
         headers: { Authorization: token },
       });
+      
+      console.log(response);
+      
        window.open(response.datafileUrl, "_blank");
   } catch (error) {
      alert("Download failed!");
-    console.error(err);
+    console.error(error);
   }
 
  
