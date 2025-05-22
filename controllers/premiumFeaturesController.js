@@ -185,7 +185,7 @@ export async function downloadOldFile(req,res){
   });
     const command = new GetObjectCommand({
     Bucket: process.env.BUCKET_NAME,
-    key: key,
+    Key: key,
     });
     
     const signedUrl = await getSignedUrl(s3Client, command, {
