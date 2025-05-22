@@ -8,10 +8,11 @@ document.getElementById('forgot-password-form').addEventListener('submit',async(
         email: email,
       }
     );
-   // console.log(response);
-    alert("Mail Sent Successfully");
-    document.querySelector("#email").value="";
-  } catch (error) {
+    if (response.status === 201) {
+      alert("Email Sent Successfully");
+      document.querySelector("#email").value="";
+    }
+      } catch (error) {
   
     if (error.status === 404) {
       alert(error.response.data.message);
