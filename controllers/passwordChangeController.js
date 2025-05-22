@@ -1,7 +1,7 @@
 import { createTransport } from "nodemailer";
 import { v4 as uuidv4 } from "uuid";
-import ForgotPasswordRequest from "../models/ForgotPasswordRequest";
-import User from "../models/Users";
+import ForgotPasswordRequest from "../models/ForgotPasswordRequest.js";
+import User from "../models/Users.js";
 import { hash } from "bcrypt";
 
 import mongoose from "mongoose";
