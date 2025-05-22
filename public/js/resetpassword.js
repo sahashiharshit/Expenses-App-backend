@@ -33,7 +33,7 @@ try {
 
     const data = response.data;
     alert(data.message);
-       window.location.assign('views/login.html');
+       window.location.assign('login.html');
 } catch (error) {
     alert(error);
 }
