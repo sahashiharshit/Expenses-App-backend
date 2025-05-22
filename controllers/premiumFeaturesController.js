@@ -7,6 +7,8 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import FileUrls from "../models/FileUrls.js";
 import Expenses from "../models/Expenses.js";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config({ path: "./.env" });
 
 export async function showLeaderBoard(req, res) {
   try {
