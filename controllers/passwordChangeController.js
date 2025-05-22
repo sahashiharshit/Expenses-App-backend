@@ -31,7 +31,7 @@ export async function forgotPassword(req, res) {
       },
     });
     const mailOptions = {
-      from: process.env.EMAIL,
+      from: process.env.EMAIL_USER,
       to: email,
       subject: "Password Reset Request",
       html: `<h1>Password Reset Request</h1>  
@@ -43,7 +43,7 @@ export async function forgotPassword(req, res) {
     await transporter.sendMail(mailOptions);
 
     await ForgotPasswordRequest.create({
-      _id: resetToken,
+      uuid: resetToken,
       isActive: true,
       userId: user._id,
     });
@@ -62,7 +62,7 @@ export async function resetPassword(req, res) {
   const session = await mongoose.startSession();
   session.startTransaction();
   try{
-    const request = await ForgotPasswordRequest.findOne({_id:token, isActive:true}).session(session);
+    const request = await ForgotPasswordRequest.findOne({uuid:token, isActive:true}).session(session);
   if(!request) {
   await session.abortTransaction();
     return res.status(404).json({ message: "Invalid or expired token" });
@@ -80,7 +80,7 @@ export async function resetPassword(req, res) {
     { session });
     
     await ForgotPasswordRequest.updateOne(
-      { _id: token },
+      { uuid: token },
       { $set: { isActive: false } },
       { session }
     );
