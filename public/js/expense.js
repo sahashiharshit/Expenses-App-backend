@@ -414,7 +414,7 @@ const showOldReports = async () => {
                 <td>${index + 1}</td>
                 <td>${file.key}</td>
                 <td>${formatDateTime(file.createdAt)}</td>
-                <td>${file}</td>
+                
                 <td>
                 <button class="text-center" onclick="downloadOldFiles('${file.key}')">
                 <i class="fa fa-download"> Download
