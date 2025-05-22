@@ -7,7 +7,7 @@ const fileUrlSchema = new mongoose.Schema({
     ref: 'User', // Assuming the file URL is linked to a user
     required: true,
   },  
-  fileUrl: {
+  s3Key: {
     type: String,
     required: true,
   }
