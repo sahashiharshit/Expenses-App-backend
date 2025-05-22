@@ -171,7 +171,7 @@ export async function oldReports(req, res) {
 }
 
 export async function downloadOldFile(req,res){
-  const { key } = req.params;
+  const key  = decodeURIComponent(req.params.key);
   console.log(key);
   
   try{
