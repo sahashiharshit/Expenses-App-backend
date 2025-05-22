@@ -412,7 +412,7 @@ const showOldReports = async () => {
         (file, index) => `
                 <tr>
                 <td>${index + 1}</td>
-                <td>${trimUrl(file.key, 40)}</td>
+                <td>${file.key}</td>
                 <td>${formatDateTime(file.createdAt)}</td>
                 <td>${file}</td>
                 <td>
