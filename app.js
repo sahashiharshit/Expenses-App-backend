@@ -25,7 +25,7 @@ app.use("/expense", authentication);
 app.use("/expense", expenses);
 app.use("/purchase", premium);
 app.use("/premium", premium);
-// app.use("/password", authentication);
+ app.use("/password", authentication);
 
 app.get("/", (req, res) => {
 
