@@ -1,3 +1,5 @@
+import axios from "axios";
+
 //global expenses
 let globalExpenses = [];
 let categories = [];
@@ -406,13 +408,13 @@ const showOldReports = async () => {
     const container = document.getElementById("reports-body");
     container.innerHTML = data
       .map(
-        (urls, index) => `
+        (file, index) => `
                 <tr>
                 <td>${index + 1}</td>
-                <td>${trimUrl(urls.fileUrl, 40)}</td>
-                <td>${formatDateTime(urls.createdAt)}</td>
+                <td>${trimUrl(file.key, 40)}</td>
+                <td>${formatDateTime(file.createdAt)}</td>
                 <td>
-                <button class="text-center" onclick="downloadOldFiles('${urls.fileUrl}')">
+                <button class="text-center" onclick="downloadOldFiles('${file.key}')">
                 <i class="fa fa-download"> Download
                 </i>
                 </button>
@@ -423,8 +425,21 @@ const showOldReports = async () => {
   } catch (error) {}
 };
 
-const downloadOldFiles = (fileUrl) => {
-  window.open(fileUrl, "_blank");
+const downloadOldFiles = async(key) => {
+  const token = localStorage.getItem("AuthToken");
+  try {
+    const response = await axios.get(
+      `https://expenses-app-ja1q.onrender.com/premium/downloadold/${encodeURIComponent(key)}`,
+      {
+        headers: { Authorization: token },
+      });
+       window.open(response.datafileUrl, "_blank");
+  } catch (error) {
+     alert("Download failed!");
+    console.error(err);
+  }
+
+ 
 };
 
 const trimUrl = (url, maxLength) => {

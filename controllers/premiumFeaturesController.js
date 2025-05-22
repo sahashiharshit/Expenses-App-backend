@@ -101,7 +101,7 @@ export async function createFile(req, res) {
       return res.status(500).json({ message: "Failed to upload file." });
     }
     const downloadedFile = new FileUrls({
-      fileUrl: fileUrl.Location,
+      s3Key: filename,
       userId: req.user._id,
     });
     await downloadedFile.save({ session });
@@ -161,8 +161,40 @@ export async function oldReports(req, res) {
     if (!reports || reports.length === 0) {
       res.status(404).json({ message: "No files found" });
     }
-    res.status(200).json(reports);
+    res.status(200).json(reports.map(report => ({
+    key:report.s3Key,
+    createdAt:report.createdAt,
+    })));
   } catch (error) {
     res.status(500).json(error);
   }
+}
+
+export async function downloadOldFile(req,res){
+  const { key } = req.params;
+  try{
+    const s3Client = new S3Client({
+    
+    region: process.env.AWS_REGION,
+    credentials: {
+      accessKeyId: process.env.IAM_ACCESS_KEY,
+      secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    },
+  });
+    const command = new GetObjectCommand({
+    Bucket: process.env.BUCKET_NAME,
+    key: key,
+    });
+    
+    const signedUrl = await getSignedUrl(s3Client, command, {
+      expiresIn: 3600,
+    });
+    res.status(200).json({ url: signedUrl });
+    
+  }
+  catch (error) {
+  console.error("Error downloading file:", error);
+  res.status(500).json({ message: "Failed to download file." });
+  }
+
 }
