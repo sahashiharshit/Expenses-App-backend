@@ -98,7 +98,7 @@ export async function resetPassword(req, res) {
 //Verfication of token
 export async function verifyToken(req, res) {
   const token = req.params.token;
-  const request = await findOne({ where: { id: token, isActive: true } });
+  const request = await ForgotPasswordRequest.findOne({ where: { uuid: token, isActive: true } });
   if (!request) {
     return res.status(404).json({ message: "Invalid or expired token" });
   }

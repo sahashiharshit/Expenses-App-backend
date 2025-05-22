@@ -8,5 +8,5 @@ router.post("/signup", signupUser);
 router.post("/login", login);
 router.post("/forgotpassword",forgotPassword);
 router.post("/reset-password",resetPassword);
-// router.get("/verify-token/:token",verifyToken);
+router.get("/verify-token/:token",verifyToken);
 export default router;
