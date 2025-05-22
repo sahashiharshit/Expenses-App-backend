@@ -96,12 +96,13 @@ export async function createFile(req, res) {
     summary += `Total Expenses this month: ${total.toFixed(2)}\n`;
     
     const filename = `Expenses${req.user._id}/${new Date().toISOString()}.txt`;
-    const fileUrl = await uploadToS3(summary, filename);
+    const safefilename = filename.replace(/[:]/g,"-");
+    const fileUrl = await uploadToS3(summary, safefilename);
     if (!fileUrl) {
       return res.status(500).json({ message: "Failed to upload file." });
     }
     const downloadedFile = new FileUrls({
-      s3Key: filename,
+      s3Key: safefilename,
       userId: req.user._id,
     });
     await downloadedFile.save({ session });
@@ -118,7 +119,7 @@ export async function createFile(req, res) {
   }
 }
 
-async function uploadToS3(data, filename) {
+async function uploadToS3(data, safefilename) {
   const BUCKET_NAME = process.env.BUCKET_NAME;
   const s3Client = new S3Client({
     region: process.env.AWS_REGION,
@@ -127,10 +128,10 @@ async function uploadToS3(data, filename) {
       secretAccessKey: process.env.SECRET_ACCESS_KEY,
     },
   });
-  const safeFilename = filename.replace(/[:]/g, "-");
+  
   const params = {
     Bucket: BUCKET_NAME,
-    Key: safeFilename,
+    Key: safefilename,
     Body: data,
 
     ContentType: "text/plain",
@@ -140,7 +141,7 @@ async function uploadToS3(data, filename) {
     await s3Client.send(command);
     const getCommand = new GetObjectCommand({
       Bucket: BUCKET_NAME,
-      Key: safeFilename,
+      Key: safefilename,
     });
     const signedUrl = await getSignedUrl(s3Client, getCommand, {
       expiresIn: 3600,
