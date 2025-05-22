@@ -18,7 +18,7 @@ const __dirname = path.dirname(_filename);
 app.use(express.json());
 app.use(cors());
 
-// app.use(morgan("combined", { stream: accessLogStream }));
+
 app.use( express.static(path.join(__dirname, "public")));
 app.use("/views", express.static(path.join(__dirname, "views")));
 app.use("/expense", authentication);
