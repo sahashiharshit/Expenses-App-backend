@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { login } from "../controllers/loginController.js";
 import { signupUser } from "../controllers/signupController.js";
-import { resetPassword, forgotPassword} from "../controllers/passwordChangeController.js";
+import { resetPassword, forgotPassword,verifyToken} from "../controllers/passwordChangeController.js";
 const router = Router();
 
 router.post("/signup", signupUser);
