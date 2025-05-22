@@ -21,7 +21,7 @@ export async function forgotPassword(req, res) {
 
     const resetToken = uuidv4();
 
-    const resetLink = `https://expenses-app-ja1q.onrender.com/reset-password.html?token=${resetToken}`;
+    const resetLink = `https://expenses-app-ja1q.onrender.com/views/reset-password.html?token=${resetToken}`;
 
     const transporter = createTransport({
       service: "gmail",

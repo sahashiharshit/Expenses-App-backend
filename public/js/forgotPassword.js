@@ -11,6 +11,7 @@ document.getElementById('forgot-password-form').addEventListener('submit',async(
     if (response.status === 201) {
       alert("Email Sent Successfully");
       document.querySelector("#email").value="";
+      window.location.assign('login.html');
     }
       } catch (error) {
   
