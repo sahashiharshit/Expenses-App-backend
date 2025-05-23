@@ -31,14 +31,7 @@ export async function addExpenses(req, res) {
       userId: userId,
     });
     await newExpense.save();
-    await User.findByIdAndUpdate(
-      userId,
-      {
-        $inc: { totalexpenses: amount }, // Increment the total expenses by the money spent
-      },
-      { new: true }
-    );
-
+  
     res.status(200).json(newExpense);
   } catch (error) {
     res.status(400).json({
@@ -64,9 +57,7 @@ export async function deleteExpense(req, res) {
     if (!expense) {
       return res.status(404).json({ message: "Expense not found" });
     }
-    await User.findByIdAndUpdate(user._id, {
-      $inc: { totalexpenses: -expense.money }, // Decrement the total expenses by the money spent
-    });
+    
     res.status(200).json({ message: "Expense Deleted Successfully" });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong deleting expense" });
@@ -168,9 +159,7 @@ export async function addIncome(req, res) {
     });
     await monthlyIncome.save();
 
-    await User.findByIdAndUpdate(userId, {
-      $inc: { monthlytotalincome: amount }, // Increment the total income by the money added
-    });
+   
     res.status(200).json({
       message: "Income added successfully",
     });
