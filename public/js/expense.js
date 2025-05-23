@@ -404,9 +404,9 @@ const showOldReports = async () => {
         headers: { Authorization: token },
       }
     );
-    console.log(data);
+   
     const container = document.getElementById("reports-body");
-    console.log(container);
+   
     container.innerHTML = data
       .map(
         (file, index) => `

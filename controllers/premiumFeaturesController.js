@@ -146,7 +146,7 @@ async function uploadToS3(data, safefilename) {
     const signedUrl = await getSignedUrl(s3Client, getCommand, {
       expiresIn: 3600,
     });
-    //const fileUrl = `https://${BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${filename}`;
+    
     return { Location: signedUrl };
   } catch (error) {
     console.error("Error uploading to S3:", error);
@@ -158,7 +158,7 @@ export async function oldReports(req, res) {
   try {
     const userId = req.user._id;
     const reports = await FileUrls.find({ userId }).sort({ createdAt: -1 });
-    console.log(reports);
+   
     if (!reports || reports.length === 0) {
       res.status(404).json({ message: "No files found" });
     }

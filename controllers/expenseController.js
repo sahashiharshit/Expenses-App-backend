@@ -1,6 +1,6 @@
 import { default as mongoose } from "mongoose";
 import Expense from "../models/Expenses.js";
-import User from "../models/Users.js";
+
 import ExpenseCategory from "../models/ExpenseCategories.js";
 import MonthlyIncome from "../models/MonthlyIncome.js";
 
@@ -46,8 +46,7 @@ export async function addExpenses(req, res) {
 
 export async function deleteExpense(req, res) {
   const id = new mongoose.Types.ObjectId(req.params.id);
-  const money = req.body.money;
-  const user = req.user;
+  
   if (!id) {
     return res.status(400).json({ message: "Invalid ID" });
   }
